@@ -8,7 +8,7 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mikirinkode.snaply.databinding.ActivityMainBinding
-import com.mikirinkode.snaply.ui.AddStoryActivity
+import com.mikirinkode.snaply.ui.addstory.AddStoryActivity
 import com.mikirinkode.snaply.ui.ProfileActivity
 import com.mikirinkode.snaply.ui.auth.AuthViewModel
 import com.mikirinkode.snaply.utils.Preferences

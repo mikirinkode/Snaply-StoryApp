@@ -11,16 +11,12 @@ buildscript {
 
 
         retrofitVersion = "2.9.0"
-        roomVersion = '2.2.3'
-        roomRuntimeVersion = '2.4.2'
-        kotlinCoroutinesVersion = "1.6.0"
         lifecycleVersion = "2.4.1"
 
         hiltVersion = "2.40"
         activityKtxVersion = '1.4.0'
         fragmentKtxVersion = '1.4.1'
-        sqlCipherVersion = '4.5.0'
-        sqliteVersion = '2.2.0'
+        cameraxVersion = "1.1.0-beta02"
 
         dependencies {
             classpath "com.google.dagger:hilt-android-gradle-plugin:$hiltVersion"

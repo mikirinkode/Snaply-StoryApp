@@ -42,8 +42,9 @@ class LoginActivity : AppCompatActivity() {
         // check prefs for email and pass
         val userEmail = preferences.getStringValues(Preferences.USER_EMAIL)
         val userPassword = preferences.getStringValues(Preferences.USER_PASSWORD)
-        if (!userEmail.isNullOrEmpty() && !userPassword.isNullOrEmpty()){
+        if (!userEmail.isNullOrEmpty() && !userPassword.isNullOrEmpty()) {
             startActivity(Intent(this, MainActivity::class.java))
+            finish()
         }
 
         viewModel.isLoading.observe(this) { showLoading(it) }
@@ -73,40 +74,26 @@ class LoginActivity : AppCompatActivity() {
     private fun loginUser(email: String, password: String) {
         viewModel.loginUser(email, password)
 
-        viewModel.isError.observe(this@LoginActivity) { isError ->
-            if (isError) {
-                viewModel.responseMessage.observe(this@LoginActivity) {
-                    if (it != null) Toast.makeText(
-                        this@LoginActivity,
-                        it,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            } else {
-                viewModel.responseMessage.observe(this@LoginActivity) {
-                    if (it != null) Toast.makeText(
-                        this@LoginActivity,
-                        it,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-                viewModel.userEntity.observe(this@LoginActivity) {
-                    if (it != null) {
-                        preferences.setValues(Preferences.USER_EMAIL, email)
-                        preferences.setValues(Preferences.USER_PASSWORD, password)
+        viewModel.responseMessage.observe(this@LoginActivity) {
+            if (it != null) Toast.makeText(
+                this@LoginActivity,
+                it,
+                Toast.LENGTH_SHORT
+            ).show()
+        }
 
-//                        preferences.setValues(Preferences.USER_ID, it.userId)
-//                        preferences.setValues(Preferences.USER_NAME, it.name)
-//                        preferences.setValues(Preferences.USER_TOKEN, it.token)
-                        startActivity(
-                            Intent(
-                                this@LoginActivity,
-                                MainActivity::class.java
-                            )
-                        )
-                        finish()
-                    }
-                }
+        viewModel.isError.observe(this@LoginActivity) { isError ->
+
+            if (!isError) {
+                preferences.setValues(Preferences.USER_EMAIL, email)
+                preferences.setValues(Preferences.USER_PASSWORD, password)
+                startActivity(
+                    Intent(
+                        this@LoginActivity,
+                        MainActivity::class.java
+                    )
+                )
+                finish()
             }
         }
     }

@@ -79,21 +79,29 @@ class MainViewModel @Inject constructor(private val api: ApiService) : ViewModel
     }
 
     fun addNewStory(token: String, imageMultipart: MultipartBody.Part, description: RequestBody){
-        val client = api.addNewStory(token, imageMultipart, description)
+        _isLoading.value = true
+        api.addNewStory("Bearer $token", imageMultipart, description)
             .enqueue(object : Callback<PostStoryResponse> {
                 override fun onResponse(
                     call: Call<PostStoryResponse>,
                     response: Response<PostStoryResponse>
                 ) {
+                    _isLoading.value = false
+                    _isError.value = !response.isSuccessful
+
                     if (response.isSuccessful){
-                        TODO("Not yet implemented")
+                        _responseMessage.value = response.body()?.message
+                    }else {
+                        _responseMessage.value = response.message()
                     }
                 }
 
                 override fun onFailure(call: Call<PostStoryResponse>, t: Throwable) {
-                    TODO("Not yet implemented")
+                    _isLoading.value = false
+                    _isError.value = true
+                    _responseMessage.value = t.message.toString()
+                    Log.e(TAG, t.message.toString())
                 }
-
             })
     }
 
