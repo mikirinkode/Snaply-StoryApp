@@ -1,14 +1,17 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.Snaply" parent="Theme.Material3.DayNight">
+    <style name="Theme.Snaply" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/primary_300</item>
         <item name="colorPrimaryVariant">@color/primary_500</item>
         <item name="colorOnPrimary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/backgroundColor</item>
+
         <!-- Customize your theme here. -->
         <item name="android:fontFamily">@font/poppins</item>
         <item name="android:windowBackground">@color/dark_500</item>
+        <item name="background">@color/dark_300</item>
+        <item name="backgroundColor">@color/dark_700</item>
     </style>
 </resources>

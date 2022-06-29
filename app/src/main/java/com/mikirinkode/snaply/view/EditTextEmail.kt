@@ -11,7 +11,7 @@ import androidx.appcompat.widget.AppCompatEditText
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
-class EditTextPassword: AppCompatEditText {
+class EditTextEmail: AppCompatEditText {
 
     constructor(context: Context) : super(context) {
         init()
@@ -33,9 +33,8 @@ class EditTextPassword: AppCompatEditText {
             }
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 if (s.isNotEmpty()){
-                    // if password length < 6 character or pattern not valid, then show error
-                    if (!isValidPassword(s)){
-                        error = "Invalid Password"
+                    if (!android.util.Patterns.EMAIL_ADDRESS.matcher(s).matches()){
+                        error = "Invalid Email"
                     }
                 }
 
@@ -49,16 +48,7 @@ class EditTextPassword: AppCompatEditText {
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
         textAlignment = View.TEXT_ALIGNMENT_VIEW_START
-        inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD
+        inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
     }
 
-    private fun isValidPassword(password: CharSequence?): Boolean {
-        // password pattern using Regular Expression
-        val regex = ("^(?=.*[0-9])"             // password must contain number
-                + "(?=.*[a-z])(?=.*[A-Z])"      // password must contain uppercase and lowercase
-                + "(?=\\S+$).{6,}$")            // password must not have whitespace and have length more than 6
-        val pattern = Pattern.compile(regex)
-
-        return if (password == null) false else pattern.matcher(password).matches()
-    }
 }
