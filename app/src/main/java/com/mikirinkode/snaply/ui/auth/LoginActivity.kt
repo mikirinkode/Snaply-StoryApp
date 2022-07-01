@@ -1,5 +1,7 @@
 package com.mikirinkode.snaply.ui.auth
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,6 +10,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatDelegate
+import com.mikirinkode.snaply.R
 import com.mikirinkode.snaply.databinding.ActivityLoginBinding
 import com.mikirinkode.snaply.ui.main.MainActivity
 import com.mikirinkode.snaply.utils.Preferences
@@ -31,6 +34,8 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        playAnimation()
+
         // check preference for dark mode
         val isDark = preferences.getBooleanValues(Preferences.DARK_MODE_PREF)
         if (isDark == true) {
@@ -51,14 +56,16 @@ class LoginActivity : AppCompatActivity() {
 
         binding.apply {
             btnLogin.setOnClickListener {
+                errorMessage.visibility = View.GONE
+
                 val email = edtLoginEmail.text.toString().trim()
                 val password = edtLoginPassword.text.toString().trim()
 
                 when {
                     TextUtils.isEmpty(email) -> edtLoginEmail.error =
-                        "email cannot be empty"
+                        getString(R.string.empty_email)
                     TextUtils.isEmpty(password) -> edtLoginPassword.error =
-                        "Password cannot be empty"
+                        getString(R.string.empty_password)
                     else -> {
                         loginUser(email, password)
                     }
@@ -67,6 +74,11 @@ class LoginActivity : AppCompatActivity() {
 
             btnRegisterNow.setOnClickListener {
                 startActivity(Intent(this@LoginActivity, RegisterActivity::class.java))
+                errorMessage.visibility = View.GONE
+            }
+
+            btnRetry.setOnClickListener {
+                errorMessage.visibility = View.GONE
             }
         }
     }
@@ -74,17 +86,11 @@ class LoginActivity : AppCompatActivity() {
     private fun loginUser(email: String, password: String) {
         viewModel.loginUser(email, password)
 
-        viewModel.responseMessage.observe(this@LoginActivity) {
-            if (it != null) Toast.makeText(
-                this@LoginActivity,
-                it,
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-
         viewModel.isError.observe(this@LoginActivity) { isError ->
 
             if (!isError) {
+                binding.errorMessage.visibility = View.GONE
+
                 preferences.setValues(Preferences.USER_EMAIL, email)
                 preferences.setValues(Preferences.USER_PASSWORD, password)
                 startActivity(
@@ -94,13 +100,59 @@ class LoginActivity : AppCompatActivity() {
                     )
                 )
                 finish()
+            } else {
+                viewModel.responseMessage.observe(this@LoginActivity) {
+                    if (it != null) {
+                        it.getContentIfNotHandled()?.let { msg ->
+                            Toast.makeText(this@LoginActivity, msg, Toast.LENGTH_SHORT).show()
+                            showErrorMessage(msg)
+                        }
+                    }
+                }
             }
+        }
+    }
+
+    private fun showErrorMessage(message: String) {
+        binding.apply {
+            tvErrorDesc.text = message
+            errorMessage.visibility = View.VISIBLE
         }
     }
 
     private fun showLoading(state: Boolean) {
         binding.apply {
-            if (state) loading.visibility = View.VISIBLE else loading.visibility = View.GONE
+            if (state) {
+                loading.visibility = View.VISIBLE
+                errorMessage.visibility = View.GONE
+            } else {
+                loading.visibility = View.GONE
+            }
         }
+    }
+
+    private fun playAnimation() {
+        binding.apply {
+            val appName = ObjectAnimator.ofFloat(tvAppName, View.ALPHA, 1f).setDuration(500)
+            val loginDesc = ObjectAnimator.ofFloat(tvLoginDesc, View.ALPHA, 1f).setDuration(500)
+            val email = ObjectAnimator.ofFloat(tilLoginEmail, View.ALPHA, 1f).setDuration(1000)
+            val password =
+                ObjectAnimator.ofFloat(tilLoginPassword, View.ALPHA, 1f).setDuration(1000)
+            val btnLogin = ObjectAnimator.ofFloat(btnLogin, View.ALPHA, 1f).setDuration(1000)
+            val tvNotHaveAcc =
+                ObjectAnimator.ofFloat(tvNotHaveAcc, View.ALPHA, 1f).setDuration(1000)
+            val btnRegister =
+                ObjectAnimator.ofFloat(btnRegisterNow, View.ALPHA, 1f).setDuration(1000)
+
+            val together = AnimatorSet().apply {
+                playTogether(email, password, tvNotHaveAcc, btnLogin, btnRegister)
+            }
+
+            AnimatorSet().apply {
+                playSequentially(together, appName, loginDesc)
+                start()
+            }
+        }
+
     }
 }

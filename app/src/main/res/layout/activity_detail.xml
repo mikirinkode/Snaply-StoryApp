@@ -7,6 +7,7 @@
     tools:context=".ui.DetailActivity">
 
     <ImageView
+        android:transitionName="@string/story_image"
         android:id="@+id/iv_story_photo"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -15,26 +16,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:src="@tools:sample/backgrounds/scenic"/>
+        tools:src="@tools:sample/backgrounds/scenic"
+        android:contentDescription="@string/story_image" />
 
-    <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/shiny_loading"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:shimmer_auto_start="true"
-        tools:visibility="visible">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/dark_300"/>
-
-    </com.facebook.shimmer.ShimmerFrameLayout>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -84,7 +68,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:fontFamily="@font/poppins_italic"
-                    android:text="Moment captured by"
+                    android:text="@string/moment_captured_by"
                     android:layout_marginStart="32dp"
                     android:layout_marginEnd="32dp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -145,7 +129,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:src="@drawable/ic_back"
-            app:tint="?android:attr/textColorPrimary" />
+            app:tint="?android:attr/textColorPrimary"
+            android:contentDescription="@string/btn_back" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

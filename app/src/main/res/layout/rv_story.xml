@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="@dimen/corner_radius"
+    style="?attr/materialCardViewFilledStyle"
     android:layout_marginBottom="16dp"
     android:layout_marginStart="16dp"
     android:layout_marginEnd="16dp">
@@ -17,12 +18,13 @@
             android:id="@+id/iv_story_photo"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:scaleType="center"
+            android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@tools:sample/backgrounds/scenic" />
+            tools:src="@drawable/ic_image_loading"
+            android:contentDescription="@string/story_image" />
 
         <View
             android:layout_width="match_parent"

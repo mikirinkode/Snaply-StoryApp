@@ -11,6 +11,7 @@ import com.mikirinkode.snaply.data.remote.response.ListStoryItem
 import com.mikirinkode.snaply.data.remote.response.PostStoryResponse
 import com.mikirinkode.snaply.data.remote.response.StoryResponse
 import com.mikirinkode.snaply.utils.DataMapper
+import com.mikirinkode.snaply.utils.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -28,15 +29,15 @@ class MainViewModel @Inject constructor(private val api: ApiService) : ViewModel
     private val _isError = MutableLiveData<Boolean>()
     val isError: LiveData<Boolean> = _isError
 
-    private val _responseMessage = MutableLiveData<String>()
-    val responseMessage: LiveData<String> = _responseMessage
+    private val _responseMessage = MutableLiveData<Event<String>>()
+    val responseMessage: LiveData<Event<String>> = _responseMessage
 
     private val _storyList = MutableLiveData<ArrayList<StoryEntity>>()
     val storyList: LiveData<ArrayList<StoryEntity>> = _storyList
 
     fun getAllStories(token: String) {
         _isLoading.value = true
-        val client = api.getAllStories("Bearer $token")
+        val client = api.getAllStories("Bearer $token", 20)
         client.enqueue(object : Callback<StoryResponse> {
             override fun onResponse(call: Call<StoryResponse>, response: Response<StoryResponse>) {
                 _isLoading.value = false
@@ -45,7 +46,7 @@ class MainViewModel @Inject constructor(private val api: ApiService) : ViewModel
                 if (response.isSuccessful) {
                     Log.d(TAG, response.body()?.listStory?.size.toString())
 
-                    _responseMessage.value = response.body()?.message
+                    _responseMessage.value = Event(response.body()?.message.toString())
 
                     if (!response.body()?.listStory.isNullOrEmpty()) {
                         val list = ArrayList<StoryEntity>()
@@ -65,15 +66,15 @@ class MainViewModel @Inject constructor(private val api: ApiService) : ViewModel
                         Log.d(TAG, storyList.value?.size.toString())
                     }
                 } else {
-                    _responseMessage.value = response.message()
+                    _responseMessage.value = Event(response.message())
                 }
             }
 
             override fun onFailure(call: Call<StoryResponse>, t: Throwable) {
                 _isLoading.value = false
                 _isError.value = true
-                _responseMessage.value = t.message.toString()
-                Log.e(TAG, t.message.toString())
+                _responseMessage.value = Event(t.message.toString())
+                Log.e("$TAG(onFail)", t.message.toString())
             }
         })
     }
@@ -90,17 +91,17 @@ class MainViewModel @Inject constructor(private val api: ApiService) : ViewModel
                     _isError.value = !response.isSuccessful
 
                     if (response.isSuccessful){
-                        _responseMessage.value = response.body()?.message
+                        _responseMessage.value = Event(response.body()?.message.toString())
                     }else {
-                        _responseMessage.value = response.message()
+                        _responseMessage.value = Event(response.message())
                     }
                 }
 
                 override fun onFailure(call: Call<PostStoryResponse>, t: Throwable) {
                     _isLoading.value = false
                     _isError.value = true
-                    _responseMessage.value = t.message.toString()
-                    Log.e(TAG, t.message.toString())
+                    _responseMessage.value = Event(t.message.toString())
+                    Log.e("$TAG(onFail)", t.message.toString())
                 }
             })
     }

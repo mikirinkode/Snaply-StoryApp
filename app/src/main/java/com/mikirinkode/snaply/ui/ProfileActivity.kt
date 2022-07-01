@@ -3,6 +3,7 @@ package com.mikirinkode.snaply.ui
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import com.mikirinkode.snaply.R
@@ -24,32 +25,25 @@ class ProfileActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_profile)
+        setContentView(binding.root)
 
         binding.apply {
 
             val isDark = preferences.getBooleanValues(Preferences.DARK_MODE_PREF)
             switchDarkMode.isChecked = isDark == true
 
+            val name = preferences.getStringValues(Preferences.USER_NAME)
+            tvUserName.text = name
+
+            val email = preferences.getStringValues(Preferences.USER_EMAIL)
+            tvUserEmail.text = email
+
             switchDarkMode.setOnCheckedChangeListener { _, checked ->
-                Log.e("ProfileDarkCheckValue:", checked.toString())
                 preferences.setValues(Preferences.DARK_MODE_PREF, checked)
                 if (checked) {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                 } else {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                }
-            }
-
-            switchDarkMode.setOnClickListener {
-                Log.e("ProfileDarkActivated:", it.isActivated.toString())
-                Log.e("ProfileDarkChecked:", switchDarkMode.isChecked.toString())
-                if (it.isActivated){
-
-                }
-
-                if (switchDarkMode.isChecked){
-
                 }
             }
 
@@ -60,7 +54,12 @@ class ProfileActivity : AppCompatActivity() {
                 preferences.setValues(Preferences.USER_EMAIL, "")
                 preferences.setValues(Preferences.USER_PASSWORD, "")
                 startActivity(Intent(this@ProfileActivity, LoginActivity::class.java))
+                finish()
             }
+
+            btnBack.setOnClickListener { onBackPressed() }
+
+            btnChangeLanguage.setOnClickListener { startActivity(Intent(Settings.ACTION_LOCALE_SETTINGS)) }
         }
     }
 }

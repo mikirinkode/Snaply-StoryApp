@@ -8,19 +8,18 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.mikirinkode.snaply.R
 import com.mikirinkode.snaply.databinding.ActivityAddStoryBinding
 import com.mikirinkode.snaply.ui.main.MainActivity
 import com.mikirinkode.snaply.ui.main.MainViewModel
-import com.mikirinkode.snaply.utils.Preferences
-import com.mikirinkode.snaply.utils.reduceFileImage
-import com.mikirinkode.snaply.utils.rotateBitmap
-import com.mikirinkode.snaply.utils.uriToFile
+import com.mikirinkode.snaply.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -48,16 +47,7 @@ class AddStoryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        // check if permission not granted, then request for permission else show dialog
-        if (!allPermissionsGranted()) {
-            ActivityCompat.requestPermissions(
-                this,
-                REQUIRED_PERMISSIONS,
-                REQUEST_CODE_PERMISSIONS
-            )
-        } else {
-            showPictureDialog()
-        }
+        showDialog()
 
         binding.apply {
 
@@ -65,41 +55,42 @@ class AddStoryActivity : AppCompatActivity() {
 
             btnUpload.setOnClickListener { uploadImage() }
 
-            btnAddPhoto.setOnClickListener {
-                if (!allPermissionsGranted()) {
-                    ActivityCompat.requestPermissions(
-                        this@AddStoryActivity,
-                        REQUIRED_PERMISSIONS,
-                        REQUEST_CODE_PERMISSIONS
-                    )
-                } else {
-                    showPictureDialog()
-                }
-            }
+            btnAddPhotoCenter.setOnClickListener { showDialog() }
+
+            btnAddPhoto.setOnClickListener { showDialog() }
         }
     }
 
-    private fun showPictureDialog() {
-        val pictureDialog = AlertDialog.Builder(this)
-        pictureDialog.setTitle("Pilih Aksi:")
-        val pictureDialogItem = arrayOf(
-            "Ambil Gambar dari Galeri",
-            "Ambil dengan Kamera"
-        )
-        pictureDialog.setItems(pictureDialogItem) { _, which ->
-            when (which) {
-                0 -> openGallery()
-                1 -> openCamera()
+    private fun showDialog() {
+        // check if permission not granted, then request for permission else show picture dialog
+        if (!allPermissionsGranted()) {
+            ActivityCompat.requestPermissions(
+                this@AddStoryActivity,
+                REQUIRED_PERMISSIONS,
+                REQUEST_CODE_PERMISSIONS
+            )
+        } else {
+            val pictureDialog = AlertDialog.Builder(this)
+            pictureDialog.setTitle(getString(R.string.choose_action))
+            val pictureDialogItem = arrayOf(
+                getString(R.string.from_gallery),
+                getString(R.string.using_camera)
+            )
+            pictureDialog.setItems(pictureDialogItem) { _, which ->
+                when (which) {
+                    0 -> openGallery()
+                    1 -> openCamera()
+                }
             }
+            pictureDialog.show()
         }
-        pictureDialog.show()
     }
 
     private fun openGallery() {
         val intent = Intent()
         intent.action = ACTION_GET_CONTENT
         intent.type = "image/*"
-        val chooser = Intent.createChooser(intent, "Choose a Picture")
+        val chooser = Intent.createChooser(intent, getString(R.string.choose_picture))
         launcherIntentGallery.launch(chooser)
     }
 
@@ -110,7 +101,12 @@ class AddStoryActivity : AppCompatActivity() {
             val selectedImg: Uri = result.data?.data as Uri
             val myFile = uriToFile(selectedImg, this)
             getFile = myFile
-            binding.ivStoryPhoto.setImageURI(selectedImg)
+
+            binding.apply {
+                if (getFile == null) btnAddPhotoCenter.visibility =
+                    View.VISIBLE else btnAddPhotoCenter.visibility = View.GONE
+                ivStoryPhoto.setImageURI(selectedImg)
+            }
         }
     }
 
@@ -129,7 +125,12 @@ class AddStoryActivity : AppCompatActivity() {
             val isBackCamera = it.data?.getBooleanExtra("isBackCamera", true) as Boolean
             getFile = myFile
             val result = rotateBitmap(BitmapFactory.decodeFile(myFile.path), isBackCamera)
-            binding.ivStoryPhoto.setImageBitmap(result)
+
+            binding.apply {
+                if (getFile == null) btnAddPhotoCenter.visibility =
+                    View.VISIBLE else btnAddPhotoCenter.visibility = View.GONE
+                ivStoryPhoto.setImageBitmap(result)
+            }
         }
     }
 
@@ -139,41 +140,57 @@ class AddStoryActivity : AppCompatActivity() {
 
             val inputDesc = edtStoryCaption.text.toString().trim()
             if (inputDesc.isEmpty()) {
-                edtStoryCaption.error = "Description is empty"
+                edtStoryCaption.error = getString(R.string.empty_desc)
             }
 
-            if (getFile != null && inputDesc.isNotEmpty()) {
-                val file = reduceFileImage(getFile as File)
+            if (inputDesc.isNotEmpty()) {
+                if (getFile != null) {
+                    val file = reduceFileImage(getFile as File)
 
-                val description = inputDesc.toRequestBody("text/plain".toMediaType())
-                val requestImageFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
-                val imageMultipart: MultipartBody.Part = MultipartBody.Part.createFormData(
-                    "photo",
-                    file.name,
-                    requestImageFile
-                )
+                    val description = inputDesc.toRequestBody("text/plain".toMediaType())
+                    val requestImageFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
+                    val imageMultipart: MultipartBody.Part = MultipartBody.Part.createFormData(
+                        "photo",
+                        file.name,
+                        requestImageFile
+                    )
 
-                if (token != null) {
-                    mainViewModel.addNewStory(token, imageMultipart, description)
+                    if (token != null) {
+                        mainViewModel.addNewStory(token, imageMultipart, description)
 
-                    mainViewModel.responseMessage.observe(this@AddStoryActivity) {
-                        if (it != null) Toast.makeText(
-                            this@AddStoryActivity,
-                            it,
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
+                        mainViewModel.responseMessage.observe(this@AddStoryActivity) {
+                            if (it != null){
+                                it.getContentIfNotHandled()?.let { msg ->
+                                    Toast.makeText(
+                                        this@AddStoryActivity,
+                                        msg,
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
+                        }
 
-                    mainViewModel.isError.observe(this@AddStoryActivity) { isError ->
-                        if (!isError) {
-                            startActivity(Intent(this@AddStoryActivity, MainActivity::class.java))
+                        mainViewModel.isError.observe(this@AddStoryActivity) { isError ->
+                            if (!isError) {
+                                startActivity(
+                                    Intent(
+                                        this@AddStoryActivity,
+                                        MainActivity::class.java
+                                    )
+                                )
+                            }
                         }
                     }
+                } else {
+                    Toast.makeText(
+                        this@AddStoryActivity,
+                        getString(R.string.select_img),
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
                 }
-            } else {
-                Toast.makeText(this@AddStoryActivity, "Please select an image.", Toast.LENGTH_SHORT)
-                    .show()
             }
+
         }
     }
 
@@ -188,7 +205,7 @@ class AddStoryActivity : AppCompatActivity() {
             if (!allPermissionsGranted()) {
                 Toast.makeText(
                     this,
-                    "Tidak mendapatkan permission.",
+                    getString(R.string.permission_not_granted),
                     Toast.LENGTH_SHORT
                 ).show()
                 finish()

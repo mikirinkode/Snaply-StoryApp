@@ -30,6 +30,7 @@ interface ApiService {
     @GET("stories")
     fun getAllStories(
         @Header("Authorization") token: String,
+        @Query("size") size: Int
     ): Call<StoryResponse>
 
     @Multipart

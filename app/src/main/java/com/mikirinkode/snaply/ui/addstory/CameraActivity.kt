@@ -71,7 +71,7 @@ class CameraActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 Toast.makeText(
                     this@CameraActivity,
-                    "Failed to open Camera.",
+                    getString(R.string.fail_open_cam),
                     Toast.LENGTH_SHORT
                 ).show()
                 Log.e(TAG, e.message.toString())
@@ -94,7 +94,7 @@ class CameraActivity : AppCompatActivity() {
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     Toast.makeText(
                         this@CameraActivity,
-                        "Successfully Capture Image.",
+                        getString(R.string.success_capt_img),
                         Toast.LENGTH_SHORT
                     ).show()
 
@@ -112,7 +112,7 @@ class CameraActivity : AppCompatActivity() {
                 override fun onError(exc: ImageCaptureException) {
                     Toast.makeText(
                         this@CameraActivity,
-                        "Failed to Capture Image.",
+                        getString(R.string.fail_to_capt_img),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
