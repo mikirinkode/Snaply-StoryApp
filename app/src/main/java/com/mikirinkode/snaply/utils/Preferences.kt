@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 
 class Preferences(val context: Context) {
 
-    var sharedPreferences = context.getSharedPreferences(USER_PREF, 0)
+    private var sharedPreferences: SharedPreferences = context.getSharedPreferences(USER_PREF, 0)
 
     fun setValues(key: String, value: String) {
         val editor: SharedPreferences.Editor = sharedPreferences.edit()
@@ -23,7 +23,7 @@ class Preferences(val context: Context) {
         return sharedPreferences.getString(key, "")
     }
 
-    fun getBooleanValues(key: String): Boolean? {
+    fun getBooleanValues(key: String): Boolean {
         return sharedPreferences.getBoolean(key, false)
     }
 

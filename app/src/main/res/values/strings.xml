@@ -52,8 +52,9 @@
     <string name="user_name">User Name</string>
     <string name="an_error_occurred">An Error Occurred.</string>
     <string name="try_again">Try Again</string>
-    <string name="appwidget_text">Snaply</string>
-    <string name="add_widget">Add widget</string>
-    <string name="app_widget_description">See stories directly from homescreen</string>
-    <string name="empty_text">Empty Text</string>
+    <string name="exit_app">Exit App</string>
+    <string name="are_you_sure_want_to_exit">Are you sure want to exit?</string>
+    <string name="sure">Yes</string>
+    <string name="no">No</string>
+    <string name="are_you_sure_want_to_logout">Are you sure want to Logout?</string>
 </resources>

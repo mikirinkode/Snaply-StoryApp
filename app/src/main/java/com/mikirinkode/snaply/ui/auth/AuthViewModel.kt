@@ -1,21 +1,16 @@
 package com.mikirinkode.snaply.ui.auth
 
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.mikirinkode.snaply.data.model.UserEntity
 import com.mikirinkode.snaply.data.remote.ApiService
 import com.mikirinkode.snaply.data.remote.response.LoginResponse
 import com.mikirinkode.snaply.data.remote.response.RegisterResponse
 import com.mikirinkode.snaply.utils.Event
 import com.mikirinkode.snaply.utils.Preferences
-import com.mikirinkode.snaply.utils.RestError
 import dagger.hilt.android.lifecycle.HiltViewModel
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -55,12 +50,6 @@ class AuthViewModel @Inject constructor(
                     _responseMessage.value = Event(response.body()?.message.toString())
                 } else {
                     _responseMessage.value = Event(response.message())
-                    try {
-                        val jObjError = JSONObject(response.errorBody().toString())
-                        Log.e(TAG, jObjError.getJSONObject("error").getString("message"))
-                    } catch (e: Exception) {
-                        Log.e(TAG, e.message.toString())
-                    }
                 }
             }
 
@@ -97,36 +86,6 @@ class AuthViewModel @Inject constructor(
                     }
                 } else {
                     _responseMessage.value = Event(response.message())
-
-                    try {
-                        val jObjError = JSONObject(response.errorBody()!!.string())
-                        Log.e(TAG, jObjError.getJSONObject("error").getString("message"))
-                    } catch (e: java.lang.Exception) {
-                        Log.e(TAG, e.message.toString())
-                    }
-
-                    try {
-                        val gson = Gson()
-                        val type = object : TypeToken<LoginResponse>() {}.type
-                        var errorResponse: LoginResponse? =
-                            gson.fromJson(response.errorBody()!!.charStream(), type)
-
-                        Log.e(TAG, errorResponse?.message.toString())
-                    } catch (e: Exception) {
-                        Log.e(TAG, e.message.toString())
-                    }
-
-                    try {
-                        val gson = Gson();
-                        val errorMessage: RestError =
-                            gson.fromJson(response.errorBody()?.charStream(), RestError::class.java)
-                        Log.e(TAG, errorMessage.message.toString())
-                        Log.e(TAG, errorMessage.error.toString())
-
-                    } catch (e: Exception) {
-                        Log.e(TAG, e.message.toString())
-                    }
-
                 }
             }
 

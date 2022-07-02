@@ -13,5 +13,7 @@
         <item name="android:windowBackground">@color/dark_500</item>
         <item name="background">@color/dark_300</item>
         <item name="backgroundColor">@color/dark_700</item>
+
+        <item name="android:textColor">@color/light_200</item>
     </style>
 </resources>

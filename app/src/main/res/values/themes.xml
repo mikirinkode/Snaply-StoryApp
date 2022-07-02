@@ -6,13 +6,14 @@
         <item name="colorPrimaryVariant">@color/primary_700</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/backgroundColor</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@color/primary_700</item>
         <!-- Customize your theme here. -->
 
         <item name="android:fontFamily">@font/poppins</item>
         <item name="android:windowBackground">@color/light_200</item>
         <item name="background">@color/white</item>
-        <item name="backgroundColor">@color/neutral_200</item>
+        <item name="backgroundColor">@color/primary_500</item>
+        <item name="android:textColor">@color/neutral_700</item>
     </style>
 
     <style name="Theme.Snaply.Button" parent="Widget.Material3.Button.ElevatedButton">

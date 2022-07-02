@@ -1,20 +1,23 @@
 package com.mikirinkode.snaply.ui.main
 
-import android.app.Activity
+import android.content.DialogInterface
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mikirinkode.snaply.R
 import com.mikirinkode.snaply.databinding.ActivityMainBinding
+import com.mikirinkode.snaply.ui.profile.ProfileActivity
 import com.mikirinkode.snaply.ui.addstory.AddStoryActivity
-import com.mikirinkode.snaply.ui.ProfileActivity
 import com.mikirinkode.snaply.ui.auth.AuthViewModel
 import com.mikirinkode.snaply.utils.Preferences
 import dagger.hilt.android.AndroidEntryPoint
@@ -141,6 +144,22 @@ class MainActivity : AppCompatActivity() {
             tvErrorDesc.text = message
             errorMessage.visibility = View.VISIBLE
         }
+    }
+
+    override fun onBackPressed() {
+        val builder = MaterialAlertDialogBuilder(this)
+        builder.setTitle(getString(R.string.exit_app))
+        builder.setMessage(getString(R.string.are_you_sure_want_to_exit))
+            .setCancelable(false)
+            .setPositiveButton(getString(R.string.sure)) { _, _ ->
+                finish()
+            }
+            .setNegativeButton(getString(R.string.no)) { dialogInterface, _ ->
+                dialogInterface.cancel()
+            }
+
+        val alertDialog: AlertDialog = builder.create()
+        alertDialog.show()
     }
 
     companion object {

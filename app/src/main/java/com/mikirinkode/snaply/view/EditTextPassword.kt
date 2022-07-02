@@ -3,12 +3,10 @@ package com.mikirinkode.snaply.view
 import android.content.Context
 import android.graphics.Canvas
 import android.text.Editable
-import android.text.InputType
 import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.View
 import androidx.appcompat.widget.AppCompatEditText
-import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 class EditTextPassword: AppCompatEditText {
@@ -49,7 +47,6 @@ class EditTextPassword: AppCompatEditText {
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
         textAlignment = View.TEXT_ALIGNMENT_VIEW_START
-        inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD
     }
 
     private fun isValidPassword(password: CharSequence?): Boolean {

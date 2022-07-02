@@ -46,15 +46,16 @@
     <string name="already_have_acc">Sudah punya akun?</string>
     <string name="login_here">Login disini</string>
     <string name="story_image_placeholder">Story Image Placeholder</string>
-    <string name="logout">Keluar</string>
+    <string name="logout">LOGOUT</string>
     <string name="welcome_back_greeting">Hai selamat datang kembali,\nAyo berbagi cerita</string>
     <string name="sign_up_desc">Buat akun barumu \ndan kamu akan siap untuk membagikan ceritamu</string>
     <string name="user_photo_profile">User Photo Profile</string>
     <string name="user_name">User Name</string>
     <string name="an_error_occurred">Terjadi Kesalahan.</string>
     <string name="try_again">Coba Lagi</string>
-    <string name="appwidget_text">Snaply</string>
-    <string name="add_widget">Tambah widget</string>
-    <string name="app_widget_description">Lihat stories langsung dari layar utama</string>
-    <string name="empty_text">Teks Kosong</string>
+    <string name="exit_app">Keluar Aplikasi</string>
+    <string name="are_you_sure_want_to_exit">Apakah kamu yakin ingin keluar?</string>
+    <string name="sure">Yakin</string>
+    <string name="no">Tidak</string>
+    <string name="are_you_sure_want_to_logout">Apakah kamu yakin ingin Logout?</string>
 </resources>

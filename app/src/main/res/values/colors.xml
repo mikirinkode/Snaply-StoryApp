@@ -10,6 +10,7 @@
 
     <color name="neutral_200">#7F91A4</color>
     <color name="neutral_500">#526983</color>
+    <color name="neutral_700">#29486A</color>
 
     <color name="dark_200">#243342</color>
     <color name="dark_300">#1E2B38</color>
@@ -19,4 +20,8 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="red">#F44336</color>
+    <color name="light_blue_50">#FFE1F5FE</color>
+    <color name="light_blue_200">#FF81D4FA</color>
+    <color name="light_blue_600">#FF039BE5</color>
+    <color name="light_blue_900">#FF01579B</color>
 </resources>

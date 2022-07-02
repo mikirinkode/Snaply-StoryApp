@@ -4,8 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.core.app.ActivityOptionsCompat
+import androidx.core.util.Pair
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -13,9 +13,8 @@ import com.bumptech.glide.request.RequestOptions
 import com.mikirinkode.snaply.R
 import com.mikirinkode.snaply.data.model.StoryEntity
 import com.mikirinkode.snaply.databinding.RvStoryBinding
-import com.mikirinkode.snaply.ui.DetailActivity
+import com.mikirinkode.snaply.ui.detail.DetailActivity
 import com.mikirinkode.snaply.utils.StoryDiffUtil
-import androidx.core.util.Pair
 
 class StoryAdapter : RecyclerView.Adapter<StoryAdapter.StoryViewHolder>() {
 

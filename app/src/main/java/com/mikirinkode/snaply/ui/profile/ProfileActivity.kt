@@ -1,11 +1,12 @@
-package com.mikirinkode.snaply.ui
+package com.mikirinkode.snaply.ui.profile
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mikirinkode.snaply.R
 import com.mikirinkode.snaply.databinding.ActivityProfileBinding
 import com.mikirinkode.snaply.ui.auth.LoginActivity
@@ -48,13 +49,26 @@ class ProfileActivity : AppCompatActivity() {
             }
 
             btnLogout.setOnClickListener {
-                preferences.setValues(Preferences.USER_ID, "")
-                preferences.setValues(Preferences.USER_NAME, "")
-                preferences.setValues(Preferences.USER_TOKEN, "")
-                preferences.setValues(Preferences.USER_EMAIL, "")
-                preferences.setValues(Preferences.USER_PASSWORD, "")
-                startActivity(Intent(this@ProfileActivity, LoginActivity::class.java))
-                finish()
+                val builder = MaterialAlertDialogBuilder(this@ProfileActivity)
+                builder.setTitle(getString(R.string.logout))
+                builder.setMessage(getString(R.string.are_you_sure_want_to_logout))
+                    .setCancelable(false)
+                    .setPositiveButton(getString(R.string.sure)) { _, _ ->
+                        // clear the user data
+                        preferences.setValues(Preferences.USER_ID, "")
+                        preferences.setValues(Preferences.USER_NAME, "")
+                        preferences.setValues(Preferences.USER_TOKEN, "")
+                        preferences.setValues(Preferences.USER_EMAIL, "")
+                        preferences.setValues(Preferences.USER_PASSWORD, "")
+                        startActivity(Intent(this@ProfileActivity, LoginActivity::class.java))
+                        finish()
+                    }
+                    .setNegativeButton(getString(R.string.no)) { dialogInterface, _ ->
+                        dialogInterface.cancel()
+                    }
+
+                val alertDialog: AlertDialog = builder.create()
+                alertDialog.show()
             }
 
             btnBack.setOnClickListener { onBackPressed() }

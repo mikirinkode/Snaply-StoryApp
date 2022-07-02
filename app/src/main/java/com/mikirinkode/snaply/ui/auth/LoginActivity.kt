@@ -38,7 +38,7 @@ class LoginActivity : AppCompatActivity() {
 
         // check preference for dark mode
         val isDark = preferences.getBooleanValues(Preferences.DARK_MODE_PREF)
-        if (isDark == true) {
+        if (isDark) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
