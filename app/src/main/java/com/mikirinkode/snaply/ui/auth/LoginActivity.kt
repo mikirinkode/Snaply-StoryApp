@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatDelegate
@@ -44,10 +45,9 @@ class LoginActivity : AppCompatActivity() {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
 
-        // check prefs for email and pass
-        val userEmail = preferences.getStringValues(Preferences.USER_EMAIL)
-        val userPassword = preferences.getStringValues(Preferences.USER_PASSWORD)
-        if (!userEmail.isNullOrEmpty() && !userPassword.isNullOrEmpty()) {
+        // check prefs for user token
+        val userToken = preferences.getStringValues(Preferences.USER_TOKEN)
+        if (!userToken.isNullOrEmpty()) {
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
@@ -67,6 +67,9 @@ class LoginActivity : AppCompatActivity() {
                     TextUtils.isEmpty(password) -> edtLoginPassword.error =
                         getString(R.string.empty_password)
                     else -> {
+                        // close keyboard
+                        edtLoginEmail.onEditorAction(EditorInfo.IME_ACTION_DONE)
+
                         loginUser(email, password)
                     }
                 }
@@ -92,7 +95,9 @@ class LoginActivity : AppCompatActivity() {
                 binding.errorMessage.visibility = View.GONE
 
                 preferences.setValues(Preferences.USER_EMAIL, email)
-                preferences.setValues(Preferences.USER_PASSWORD, password)
+
+                viewModel.loginUser(email, password)
+
                 startActivity(
                     Intent(
                         this@LoginActivity,
@@ -112,6 +117,7 @@ class LoginActivity : AppCompatActivity() {
             }
         }
     }
+
 
     private fun showErrorMessage(message: String) {
         binding.apply {

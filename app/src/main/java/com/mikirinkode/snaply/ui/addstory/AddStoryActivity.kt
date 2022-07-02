@@ -178,6 +178,7 @@ class AddStoryActivity : AppCompatActivity() {
                                         MainActivity::class.java
                                     )
                                 )
+                                finishAffinity()
                             }
                         }
                     }

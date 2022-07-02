@@ -3,15 +3,15 @@ package com.mikirinkode.snaply.ui.auth
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import com.mikirinkode.snaply.R
 import com.mikirinkode.snaply.databinding.ActivityRegisterBinding
-import com.mikirinkode.snaply.ui.main.MainActivity
 import com.mikirinkode.snaply.utils.Preferences
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -54,6 +54,10 @@ class RegisterActivity : AppCompatActivity() {
                     passwordConf != password -> edtRegisterPasswordConf.error =
                         getString(R.string.pass_not_match)
                     else -> {
+                        // close keyboard
+                        edtRegisterName.onEditorAction(EditorInfo.IME_ACTION_DONE)
+
+                        // register user account
                         viewModel.registerNewUser(name, email, password)
 
                         viewModel.isError.observe(this@RegisterActivity) { isError ->
@@ -78,15 +82,14 @@ class RegisterActivity : AppCompatActivity() {
                                 }
 
                                 preferences.setValues(Preferences.USER_EMAIL, email)
-                                preferences.setValues(Preferences.USER_PASSWORD, password)
 
                                 startActivity(
                                     Intent(
                                         this@RegisterActivity,
-                                        MainActivity::class.java
+                                        LoginActivity::class.java
                                     )
                                 )
-                                finish()
+                                finishAffinity()
                             }
                         }
                     }

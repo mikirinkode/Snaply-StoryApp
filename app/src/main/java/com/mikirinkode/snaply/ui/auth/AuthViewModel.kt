@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.mikirinkode.snaply.data.model.UserEntity
+import com.google.gson.Gson
 import com.mikirinkode.snaply.data.remote.ApiService
 import com.mikirinkode.snaply.data.remote.response.LoginResponse
 import com.mikirinkode.snaply.data.remote.response.RegisterResponse
@@ -32,8 +32,6 @@ class AuthViewModel @Inject constructor(
     private val _responseMessage = MutableLiveData<Event<String>>()
     val responseMessage: LiveData<Event<String>> = _responseMessage
 
-    private val _userEntity = MutableLiveData<UserEntity>()
-    val userEntity: LiveData<UserEntity> = _userEntity
 
     fun registerNewUser(name: String, email: String, password: String) {
         _isLoading.value = true
@@ -50,6 +48,17 @@ class AuthViewModel @Inject constructor(
                     _responseMessage.value = Event(response.body()?.message.toString())
                 } else {
                     _responseMessage.value = Event(response.message())
+
+                    try {
+                        val responseBody = Gson().fromJson(response.errorBody()?.charStream(), RegisterResponse::class.java)
+
+                        Log.e(TAG, "response.errorBody()::" + responseBody.error.toString())
+                        Log.e(TAG, "response.errorBody()::" + responseBody.message)
+
+                        _responseMessage.value = Event(responseBody.message)
+                    } catch (e: Exception){
+                        Log.e(TAG, e.message.toString())
+                    }
                 }
             }
 
@@ -78,14 +87,23 @@ class AuthViewModel @Inject constructor(
                     val loginResult = response.body()?.loginResult
                     _responseMessage.value = Event(response.body()?.message.toString())
                     if (loginResult != null) {
-                        _userEntity.value =
-                            UserEntity(loginResult.userId, loginResult.name, loginResult.token)
                         preferences.setValues(Preferences.USER_ID, loginResult.userId)
                         preferences.setValues(Preferences.USER_NAME, loginResult.name)
                         preferences.setValues(Preferences.USER_TOKEN, loginResult.token)
                     }
                 } else {
                     _responseMessage.value = Event(response.message())
+
+                    try {
+                        val responseBody = Gson().fromJson(response.errorBody()?.charStream(), LoginResponse::class.java)
+
+                        Log.e(TAG, "response.errorBody()::" + responseBody.error.toString())
+                        Log.e(TAG, "response.errorBody()::" + responseBody.message)
+
+                        _responseMessage.value = Event(responseBody.message)
+                    } catch (e: Exception){
+                        Log.e(TAG, e.message.toString())
+                    }
                 }
             }
 

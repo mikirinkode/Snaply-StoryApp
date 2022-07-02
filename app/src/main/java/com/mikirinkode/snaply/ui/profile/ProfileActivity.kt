@@ -59,9 +59,8 @@ class ProfileActivity : AppCompatActivity() {
                         preferences.setValues(Preferences.USER_NAME, "")
                         preferences.setValues(Preferences.USER_TOKEN, "")
                         preferences.setValues(Preferences.USER_EMAIL, "")
-                        preferences.setValues(Preferences.USER_PASSWORD, "")
                         startActivity(Intent(this@ProfileActivity, LoginActivity::class.java))
-                        finish()
+                        finishAffinity()
                     }
                     .setNegativeButton(getString(R.string.no)) { dialogInterface, _ ->
                         dialogInterface.cancel()

@@ -31,8 +31,6 @@ class Preferences(val context: Context) {
         const val USER_PREF = "user_pref"
 
         const val USER_EMAIL = "user_email"
-        const val USER_PASSWORD = "user_password"
-
         const val USER_NAME = "user_name"
         const val USER_ID = "user_id"
         const val USER_TOKEN = "user_token"
