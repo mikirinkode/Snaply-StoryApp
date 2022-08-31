@@ -13,6 +13,7 @@ import androidx.core.util.Pair
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mikirinkode.snaply.R
+import com.mikirinkode.snaply.data.Result
 import com.mikirinkode.snaply.databinding.ActivityMainBinding
 import com.mikirinkode.snaply.ui.addstory.AddStoryActivity
 import com.mikirinkode.snaply.ui.profile.ProfileActivity
@@ -41,7 +42,7 @@ class MainActivity : AppCompatActivity() {
 
         mainViewModel.isLoading.observe(this) { showLoading(it) }
         mainViewModel.isError.observe(this) { error ->
-            if (error){
+            if (error) {
                 mainViewModel.responseMessage.observe(this) {
                     it.getContentIfNotHandled()?.let { msg ->
                         showError(msg)
@@ -67,7 +68,10 @@ class MainActivity : AppCompatActivity() {
                         Pair(ivUserPhoto, getString(R.string.user_photo_profile)),
                         Pair(tvUserName, getString(R.string.user_name))
                     )
-                startActivity(Intent(this@MainActivity, ProfileActivity::class.java), optionsCompat.toBundle())
+                startActivity(
+                    Intent(this@MainActivity, ProfileActivity::class.java),
+                    optionsCompat.toBundle()
+                )
             }
 
             btnAdd.setOnClickListener {
@@ -84,31 +88,48 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
     private fun observeStoryList() {
         val userToken = preferences.getStringValues(Preferences.USER_TOKEN)
         if (userToken != null) {
-            mainViewModel.getAllStories(userToken)
-        }
-
-        mainViewModel.storyList.observe(this) { list ->
-            if (!list.isNullOrEmpty()) {
-                Log.d(TAG, list.size.toString())
-                storyAdapter.setData(list)
+            mainViewModel.getStoryList(userToken).observe(this) { result ->
+                when (result) {
+                    is Result.Success -> {
+                        binding.loading.visibility = View.GONE
+                        if (result.data.isNotEmpty()) {
+                            Log.d(TAG, result.data.size.toString())
+                            storyAdapter.setData(result.data)
+                        }
+                    }
+                    is Result.Loading -> {
+                        binding.loading.visibility = View.VISIBLE
+                    }
+                    is Result.Error -> {
+                        binding.loading.visibility = View.GONE
+                        Toast.makeText(this, result.error, Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
         }
+
+//        mainViewModel.storyList.observe(this) { list ->
+//            if (!list.isNullOrEmpty()) {
+//                Log.d(TAG, list.size.toString())
+//                storyAdapter.setData(list)
+//            }
+//        }
     }
 
 
     private fun showLoading(state: Boolean) {
         binding.apply {
-            if (state){
+            if (state) {
                 loading.visibility = View.VISIBLE
                 errorMessage.visibility = View.GONE
-            } else{
+            } else {
                 loading.visibility = View.GONE
             }
-            if (state) shinyLoading.visibility = View.VISIBLE else shinyLoading.visibility = View.GONE
+            if (state) shinyLoading.visibility = View.VISIBLE else shinyLoading.visibility =
+                View.GONE
         }
     }
 

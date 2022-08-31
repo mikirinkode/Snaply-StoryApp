@@ -17,12 +17,14 @@
             android:id="@+id/iv_story_photo"
             android:layout_width="match_parent"
             android:layout_height="200dp"
+            android:contentDescription="@string/story_image_placeholder"
             android:scaleType="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:contentDescription="@string/story_image_placeholder" />
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/tv_story_title"
