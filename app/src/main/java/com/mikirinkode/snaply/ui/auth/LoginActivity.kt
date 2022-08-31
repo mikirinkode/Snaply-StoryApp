@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.mikirinkode.snaply.R
 import com.mikirinkode.snaply.databinding.ActivityLoginBinding
 import com.mikirinkode.snaply.ui.main.MainActivity
+import com.mikirinkode.snaply.ui.profile.AuthViewModel
 import com.mikirinkode.snaply.utils.Preferences
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

@@ -82,6 +82,6 @@ class AppModule {
     @Singleton
     fun provideStoryRepository(apiService: ApiService, dao: SnaplyDao): StoryRepository{
         val appExecutors = AppExecutors()
-        return StoryRepository.getInstance(apiService, dao, appExecutors)
+        return StoryRepository(apiService, dao, appExecutors)
     }
 }

@@ -12,6 +12,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.mikirinkode.snaply.R
 import com.mikirinkode.snaply.databinding.ActivityRegisterBinding
+import com.mikirinkode.snaply.ui.profile.AuthViewModel
 import com.mikirinkode.snaply.utils.Preferences
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

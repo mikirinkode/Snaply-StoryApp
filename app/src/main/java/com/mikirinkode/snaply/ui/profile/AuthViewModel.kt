@@ -1,4 +1,4 @@
-package com.mikirinkode.snaply.ui.auth
+package com.mikirinkode.snaply.ui.profile
 
 import android.util.Log
 import androidx.lifecycle.LiveData

@@ -4,11 +4,18 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.gson.Gson
 import com.mikirinkode.snaply.data.local.SnaplyDao
 import com.mikirinkode.snaply.data.model.StoryEntity
 import com.mikirinkode.snaply.data.remote.ApiService
+import com.mikirinkode.snaply.data.remote.response.PostStoryResponse
+import com.mikirinkode.snaply.data.remote.response.RegisterResponse
 import com.mikirinkode.snaply.data.remote.response.StoryResponse
+import com.mikirinkode.snaply.ui.profile.AuthViewModel
 import com.mikirinkode.snaply.utils.AppExecutors
+import com.mikirinkode.snaply.utils.Event
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -19,10 +26,10 @@ class StoryRepository @Inject constructor(
     private val snaplyDao: SnaplyDao,
     private val appExecutors: AppExecutors
 ) {
+    // WHAT IS MEDIATOR LIVE DATA
     private val result = MediatorLiveData<Result<List<StoryEntity>>>()
 
     fun getStoryList(token: String): LiveData<Result<List<StoryEntity>>> {
-//        val resultList = MutableLiveData<Result<List<StoryEntity>>>()
 
         result.value = Result.Loading
         val client = apiService.getAllStories("Bearer $token", 20)
@@ -48,8 +55,18 @@ class StoryRepository @Inject constructor(
                             snaplyDao.insertAllStory(list)
                         }
                     }
-                } else {
-//                    _responseMessage.value = Event(response.message())
+                }else {
+                    try {
+                        val responseBody = Gson().fromJson(
+                            response.errorBody()?.charStream(),
+                            RegisterResponse::class.java
+                        )
+                        Log.e(TAG, "response.errorBody()::" + responseBody.message)
+
+                        result.value = Result.Error(responseBody.message.toString())
+                    } catch (e: Exception) {
+                        Log.e(TAG, e.message.toString())
+                    }
                 }
             }
 
@@ -68,18 +85,59 @@ class StoryRepository @Inject constructor(
         return result
     }
 
+    fun addNewStory(
+        token: String,
+        imageMultipart: MultipartBody.Part,
+        description: RequestBody
+    ): MediatorLiveData<Result<String>> {
+        val result = MediatorLiveData<Result<String>>()
+
+        result.value = Result.Loading
+
+        apiService.addNewStory("Bearer $token", imageMultipart, description)
+            .enqueue(object : Callback<PostStoryResponse> {
+                override fun onResponse(
+                    call: Call<PostStoryResponse>,
+                    response: Response<PostStoryResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        result.value = Result.Success(response.body()?.message.toString())
+                    } else {
+                        try {
+                            val responseBody = Gson().fromJson(
+                                response.errorBody()?.charStream(),
+                                RegisterResponse::class.java
+                            )
+                            Log.e(TAG, "response.errorBody()::" + responseBody.message)
+
+                            result.value = Result.Error(responseBody.message.toString())
+                        } catch (e: Exception) {
+                            Log.e(TAG, e.message.toString())
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<PostStoryResponse>, t: Throwable) {
+                    result.value = Result.Error(t.message.toString())
+                    Log.e("$TAG(onFail)", t.message.toString())
+                }
+            })
+
+        return result
+    }
+
     companion object {
         private const val TAG = "StoryRepository"
-
-        @Volatile
-        private var instance: StoryRepository? = null
-        fun getInstance(
-            apiService: ApiService,
-            snaplyDao: SnaplyDao,
-            appExecutors: AppExecutors
-        ): StoryRepository =
-            instance ?: synchronized(this) {
-                instance ?: StoryRepository(apiService, snaplyDao, appExecutors)
-            }.also { instance = it }
+//
+//        @Volatile
+//        private var instance: StoryRepository? = null
+//        fun getInstance(
+//            apiService: ApiService,
+//            snaplyDao: SnaplyDao,
+//            appExecutors: AppExecutors
+//        ): StoryRepository =
+//            instance ?: synchronized(this) {
+//                instance ?: StoryRepository(apiService, snaplyDao, appExecutors)
+//            }.also { instance = it }
     }
 }

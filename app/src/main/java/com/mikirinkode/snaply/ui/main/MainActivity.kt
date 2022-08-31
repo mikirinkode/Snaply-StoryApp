@@ -18,6 +18,7 @@ import com.mikirinkode.snaply.databinding.ActivityMainBinding
 import com.mikirinkode.snaply.ui.addstory.AddStoryActivity
 import com.mikirinkode.snaply.ui.profile.ProfileActivity
 import com.mikirinkode.snaply.utils.Preferences
+import com.mikirinkode.snaply.viewmodel.StoryViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -31,7 +32,7 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var preferences: Preferences
 
-    private val mainViewModel: MainViewModel by viewModels()
+    private val storyViewModel: StoryViewModel by viewModels()
     private val storyAdapter = StoryAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,18 +40,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         observeStoryList()
-
-        mainViewModel.isLoading.observe(this) { showLoading(it) }
-        mainViewModel.isError.observe(this) { error ->
-            if (error) {
-                mainViewModel.responseMessage.observe(this) {
-                    it.getContentIfNotHandled()?.let { msg ->
-                        showError(msg)
-                        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-        }
 
         binding.apply {
             rvStory.apply {
@@ -91,7 +80,8 @@ class MainActivity : AppCompatActivity() {
     private fun observeStoryList() {
         val userToken = preferences.getStringValues(Preferences.USER_TOKEN)
         if (userToken != null) {
-            mainViewModel.getStoryList(userToken).observe(this) { result ->
+            storyViewModel.getStoryList(userToken).observe(this) { result ->
+                binding.swipeToRefresh.isRefreshing = false
                 when (result) {
                     is Result.Success -> {
                         binding.loading.visibility = View.GONE
@@ -110,13 +100,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-
-//        mainViewModel.storyList.observe(this) { list ->
-//            if (!list.isNullOrEmpty()) {
-//                Log.d(TAG, list.size.toString())
-//                storyAdapter.setData(list)
-//            }
-//        }
     }
 
 

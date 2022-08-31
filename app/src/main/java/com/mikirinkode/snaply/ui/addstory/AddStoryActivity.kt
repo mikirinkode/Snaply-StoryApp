@@ -16,9 +16,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.mikirinkode.snaply.R
+import com.mikirinkode.snaply.data.Result
 import com.mikirinkode.snaply.databinding.ActivityAddStoryBinding
 import com.mikirinkode.snaply.ui.main.MainActivity
-import com.mikirinkode.snaply.ui.main.MainViewModel
+import com.mikirinkode.snaply.viewmodel.StoryViewModel
 import com.mikirinkode.snaply.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaType
@@ -39,7 +40,7 @@ class AddStoryActivity : AppCompatActivity() {
     @Inject
     lateinit var preferences: Preferences
 
-    private val mainViewModel: MainViewModel by viewModels()
+    private val storyViewModel: StoryViewModel by viewModels()
 
     private var getFile: File? = null
 
@@ -156,29 +157,26 @@ class AddStoryActivity : AppCompatActivity() {
                     )
 
                     if (token != null) {
-                        mainViewModel.addNewStory(token, imageMultipart, description)
-
-                        mainViewModel.responseMessage.observe(this@AddStoryActivity) {
-                            if (it != null){
-                                it.getContentIfNotHandled()?.let { msg ->
-                                    Toast.makeText(
-                                        this@AddStoryActivity,
-                                        msg,
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                            }
-                        }
-
-                        mainViewModel.isError.observe(this@AddStoryActivity) { isError ->
-                            if (!isError) {
-                                startActivity(
-                                    Intent(
-                                        this@AddStoryActivity,
-                                        MainActivity::class.java
+                        storyViewModel.addNewStory(token, imageMultipart, description).observe(this@AddStoryActivity) { result ->
+                            when (result){
+                                is Result.Success -> {
+                                    Toast.makeText(this@AddStoryActivity, result.data.toString(), Toast.LENGTH_SHORT).show()
+                                    loadingIndicator.visibility = View.GONE
+                                    startActivity(
+                                        Intent(
+                                            this@AddStoryActivity,
+                                            MainActivity::class.java
+                                        )
                                     )
-                                )
-                                finishAffinity()
+                                    finishAffinity()
+                                }
+                                is Result.Error -> {
+                                    Toast.makeText(this@AddStoryActivity, result.error.toString(), Toast.LENGTH_SHORT).show()
+                                    loadingIndicator.visibility = View.GONE
+                                }
+                                Result.Loading -> {
+                                    loadingIndicator.visibility = View.VISIBLE
+                                }
                             }
                         }
                     }
