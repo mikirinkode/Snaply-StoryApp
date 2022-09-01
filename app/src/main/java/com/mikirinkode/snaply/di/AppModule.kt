@@ -2,10 +2,11 @@ package com.mikirinkode.snaply.di
 
 import android.content.Context
 import androidx.room.Room
-import com.mikirinkode.snaply.data.StoryRepository
-import com.mikirinkode.snaply.data.local.SnaplyDao
-import com.mikirinkode.snaply.data.local.SnaplyDatabase
-import com.mikirinkode.snaply.data.remote.ApiService
+import com.mikirinkode.snaply.data.repository.StoryRepository
+import com.mikirinkode.snaply.data.repository.UserRepository
+import com.mikirinkode.snaply.data.source.local.SnaplyDao
+import com.mikirinkode.snaply.data.source.local.SnaplyDatabase
+import com.mikirinkode.snaply.data.source.remote.ApiService
 import com.mikirinkode.snaply.utils.AppExecutors
 import com.mikirinkode.snaply.utils.Constants
 import com.mikirinkode.snaply.utils.Preferences
@@ -80,8 +81,13 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideStoryRepository(apiService: ApiService, dao: SnaplyDao): StoryRepository{
-        val appExecutors = AppExecutors()
+    fun provideStoryRepository(apiService: ApiService, dao: SnaplyDao, appExecutors: AppExecutors): StoryRepository {
         return StoryRepository(apiService, dao, appExecutors)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserRepository(apiService: ApiService, dao: SnaplyDao, preferences: Preferences, appExecutors: AppExecutors): UserRepository {
+        return UserRepository(apiService, dao, appExecutors, preferences)
     }
 }

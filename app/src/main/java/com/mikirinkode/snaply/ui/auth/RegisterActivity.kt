@@ -11,8 +11,9 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.mikirinkode.snaply.R
+import com.mikirinkode.snaply.data.Result
 import com.mikirinkode.snaply.databinding.ActivityRegisterBinding
-import com.mikirinkode.snaply.ui.profile.AuthViewModel
+import com.mikirinkode.snaply.viewmodel.UserViewModel
 import com.mikirinkode.snaply.utils.Preferences
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -27,15 +28,13 @@ class RegisterActivity : AppCompatActivity() {
     @Inject
     lateinit var preferences: Preferences
 
-    private val viewModel: AuthViewModel by viewModels()
+    private val viewModel: UserViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
         playAnimation()
-
-        viewModel.isLoading.observe(this) { showLoading(it) }
 
         binding.apply {
             btnRegister.setOnClickListener {
@@ -59,38 +58,29 @@ class RegisterActivity : AppCompatActivity() {
                         edtRegisterName.onEditorAction(EditorInfo.IME_ACTION_DONE)
 
                         // register user account
-                        viewModel.registerNewUser(name, email, password)
+                        viewModel.registerNewUser(name, email, password).observe(this@RegisterActivity) { result ->
+                            when (result) {
+                                is Result.Success -> {
+                                    showLoading(false)
+                                    Toast.makeText(this@RegisterActivity, result.data, Toast.LENGTH_SHORT).show()
+                                    preferences.setValues(Preferences.USER_EMAIL, email)
 
-                        viewModel.isError.observe(this@RegisterActivity) { isError ->
-                            if (isError) {
-                                viewModel.responseMessage.observe(this@RegisterActivity) {
-                                    it.getContentIfNotHandled()?.let { msg ->
-                                        Toast.makeText(this@RegisterActivity, msg, Toast.LENGTH_SHORT).show()
-                                        showErrorMessage(msg)
-                                    }
-                                }
-                            } else {
-                                errorMessage.visibility = View.GONE
-
-                                viewModel.responseMessage.observe(this@RegisterActivity) {
-                                    it?.getContentIfNotHandled()?.let { text ->
-                                        Toast.makeText(
+                                    startActivity(
+                                        Intent(
                                             this@RegisterActivity,
-                                            text,
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
-                                }
-
-                                preferences.setValues(Preferences.USER_EMAIL, email)
-
-                                startActivity(
-                                    Intent(
-                                        this@RegisterActivity,
-                                        LoginActivity::class.java
+                                            LoginActivity::class.java
+                                        )
                                     )
-                                )
-                                finishAffinity()
+                                    finishAffinity()
+                                }
+                                is Result.Error -> {
+                                    showLoading(false)
+                                    showErrorMessage(result.error)
+                                    Toast.makeText(this@RegisterActivity, result.error, Toast.LENGTH_SHORT).show()
+                                }
+                                is Result.Loading -> {
+                                    showLoading(true)
+                                }
                             }
                         }
                     }

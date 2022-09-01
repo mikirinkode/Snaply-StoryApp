@@ -1,9 +1,9 @@
-package com.mikirinkode.snaply.data.remote
+package com.mikirinkode.snaply.data.source.remote
 
-import com.mikirinkode.snaply.data.remote.response.LoginResponse
-import com.mikirinkode.snaply.data.remote.response.PostStoryResponse
-import com.mikirinkode.snaply.data.remote.response.RegisterResponse
-import com.mikirinkode.snaply.data.remote.response.StoryResponse
+import com.mikirinkode.snaply.data.source.remote.response.LoginResponse
+import com.mikirinkode.snaply.data.source.remote.response.PostStoryResponse
+import com.mikirinkode.snaply.data.source.remote.response.RegisterResponse
+import com.mikirinkode.snaply.data.source.remote.response.StoryResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call

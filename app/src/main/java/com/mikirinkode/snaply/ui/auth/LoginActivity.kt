@@ -12,9 +12,10 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatDelegate
 import com.mikirinkode.snaply.R
+import com.mikirinkode.snaply.data.Result
 import com.mikirinkode.snaply.databinding.ActivityLoginBinding
 import com.mikirinkode.snaply.ui.main.MainActivity
-import com.mikirinkode.snaply.ui.profile.AuthViewModel
+import com.mikirinkode.snaply.viewmodel.UserViewModel
 import com.mikirinkode.snaply.utils.Preferences
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -30,7 +31,7 @@ class LoginActivity : AppCompatActivity() {
     @Inject
     lateinit var preferences: Preferences
 
-    private val viewModel: AuthViewModel by viewModels()
+    private val viewModel: UserViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,8 +53,6 @@ class LoginActivity : AppCompatActivity() {
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
-
-        viewModel.isLoading.observe(this) { showLoading(it) }
 
         binding.apply {
             btnLogin.setOnClickListener {
@@ -88,32 +87,25 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun loginUser(email: String, password: String) {
-        viewModel.loginUser(email, password)
-
-        viewModel.isError.observe(this@LoginActivity) { isError ->
-
-            if (!isError) {
-                binding.errorMessage.visibility = View.GONE
-
-                preferences.setValues(Preferences.USER_EMAIL, email)
-
-                viewModel.loginUser(email, password)
-
-                startActivity(
-                    Intent(
-                        this@LoginActivity,
-                        MainActivity::class.java
+        viewModel.loginUser(email, password).observe(this) { result ->
+            when (result){
+                is Result.Success -> {
+                    showLoading(false)
+                    startActivity(
+                        Intent(
+                            this@LoginActivity,
+                            MainActivity::class.java
+                        )
                     )
-                )
-                finish()
-            } else {
-                viewModel.responseMessage.observe(this@LoginActivity) {
-                    if (it != null) {
-                        it.getContentIfNotHandled()?.let { msg ->
-                            Toast.makeText(this@LoginActivity, msg, Toast.LENGTH_SHORT).show()
-                            showErrorMessage(msg)
-                        }
-                    }
+                    finish()
+                }
+                is Result.Loading -> {
+                    showLoading(true)
+                }
+                is Result.Error -> {
+                    showLoading(false)
+                    Toast.makeText(this, result.error, Toast.LENGTH_SHORT).show()
+                    showErrorMessage(result.error)
                 }
             }
         }

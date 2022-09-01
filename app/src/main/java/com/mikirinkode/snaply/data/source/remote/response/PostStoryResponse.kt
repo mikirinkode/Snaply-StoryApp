@@ -1,8 +1,8 @@
-package com.mikirinkode.snaply.data.remote.response
+package com.mikirinkode.snaply.data.source.remote.response
 
 import com.google.gson.annotations.SerializedName
 
-data class RegisterResponse(
+data class PostStoryResponse(
 
 	@field:SerializedName("error")
 	val error: Boolean,

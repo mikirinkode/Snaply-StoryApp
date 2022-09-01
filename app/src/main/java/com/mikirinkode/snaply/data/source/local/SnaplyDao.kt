@@ -1,4 +1,4 @@
-package com.mikirinkode.snaply.data.local
+package com.mikirinkode.snaply.data.source.local
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
@@ -6,7 +6,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.mikirinkode.snaply.data.model.StoryEntity
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface SnaplyDao {

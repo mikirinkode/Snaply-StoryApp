@@ -1,19 +1,17 @@
-package com.mikirinkode.snaply.data
+package com.mikirinkode.snaply.data.repository
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
-import com.mikirinkode.snaply.data.local.SnaplyDao
+import com.mikirinkode.snaply.data.Result
+import com.mikirinkode.snaply.data.source.local.SnaplyDao
 import com.mikirinkode.snaply.data.model.StoryEntity
-import com.mikirinkode.snaply.data.remote.ApiService
-import com.mikirinkode.snaply.data.remote.response.PostStoryResponse
-import com.mikirinkode.snaply.data.remote.response.RegisterResponse
-import com.mikirinkode.snaply.data.remote.response.StoryResponse
-import com.mikirinkode.snaply.ui.profile.AuthViewModel
+import com.mikirinkode.snaply.data.source.remote.ApiService
+import com.mikirinkode.snaply.data.source.remote.response.PostStoryResponse
+import com.mikirinkode.snaply.data.source.remote.response.RegisterResponse
+import com.mikirinkode.snaply.data.source.remote.response.StoryResponse
 import com.mikirinkode.snaply.utils.AppExecutors
-import com.mikirinkode.snaply.utils.Event
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -38,6 +36,8 @@ class StoryRepository @Inject constructor(
                 if (response.isSuccessful) {
                     if (!response.body()?.listStory.isNullOrEmpty()) {
                         val list = ArrayList<StoryEntity>()
+
+                        // TODO: CHECK WHY NEED APP EXECUTORS
                         appExecutors.diskIO.execute {
                             response.body()?.listStory?.forEach {
                                 val story = StoryEntity(
@@ -72,7 +72,7 @@ class StoryRepository @Inject constructor(
 
             override fun onFailure(call: Call<StoryResponse>, t: Throwable) {
                 result.value = Result.Error(t.message.toString())
-                Log.e("${TAG}(onFail)", t.message.toString())
+                Log.e("$TAG(onFail)", t.message.toString())
             }
         })
 
