@@ -24,7 +24,11 @@ class StoryRepository @Inject constructor(
     private val snaplyDao: SnaplyDao,
     private val appExecutors: AppExecutors
 ) {
-    // WHAT IS MEDIATOR LIVE DATA
+
+//            "Mediator Live Data adalah komponen yang digunakan untuk menggabungkan" +
+//            "banyak sumber data dalam sebuah LiveData." +
+//            "Apabila data BUKAN livedata -> gunakan setValue()" +
+//            "Jika Live Data -> gunakan addsource()"
     private val result = MediatorLiveData<Result<List<StoryEntity>>>()
 
     fun getStoryList(token: String): LiveData<Result<List<StoryEntity>>> {
@@ -78,6 +82,9 @@ class StoryRepository @Inject constructor(
 
         // check local data
         val localData = snaplyDao.getAllStory()
+
+        // apabila data sumber berupa live data, maka perlu menggunakan addSource,
+        // jika bukan gunakan setValue
         result.addSource(localData) { newData: List<StoryEntity> ->
             result.value = Result.Success(newData)
         }

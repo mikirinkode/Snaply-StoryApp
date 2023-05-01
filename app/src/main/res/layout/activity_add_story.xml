@@ -10,13 +10,13 @@
         android:id="@+id/iv_story_photo"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:contentDescription="@string/story_image"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/top_bar"
-        tools:src="@tools:sample/backgrounds/scenic"
-        android:contentDescription="@string/story_image" />
+        tools:src="@tools:sample/backgrounds/scenic" />
 
     <ImageView
         android:id="@+id/btn_add_photo_center"
@@ -25,6 +25,7 @@
         android:background="@drawable/ic_circle"
         android:backgroundTint="?attr/background"
         android:clickable="true"
+        android:contentDescription="@string/btn_add_photo"
         android:focusable="true"
         android:padding="24dp"
         android:src="@drawable/ic_add_photo"
@@ -34,8 +35,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:tint="?android:attr/textColorPrimary"
-        tools:visibility="visible"
-        android:contentDescription="@string/btn_add_photo" />
+        tools:visibility="visible" />
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -75,14 +75,14 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:clickable="true"
+            android:contentDescription="@string/btn_add_photo"
             android:elevation="2dp"
             android:focusable="true"
             android:src="@drawable/ic_add_photo"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:tint="@color/white"
-            android:contentDescription="@string/btn_add_photo" />
+            app:tint="@color/white" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_story_caption"
@@ -95,9 +95,9 @@
             android:textColorHint="@color/white"
             android:theme="@style/Widget.Material3.TextInputLayout.OutlinedBox"
             app:boxStrokeColor="@color/white"
+            app:boxStrokeWidth="0dp"
             app:boxStrokeWidthFocused="0dp"
             app:hintTextColor="@color/white"
-            app:boxStrokeWidth="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btn_upload"
             app:layout_constraintStart_toEndOf="@+id/btn_add_photo"
@@ -120,6 +120,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:clickable="true"
+            android:contentDescription="@string/btn_upload"
             android:elevation="2dp"
             android:focusable="true"
             android:src="@drawable/ic_send"
@@ -127,17 +128,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/til_story_caption"
             app:layout_constraintTop_toTopOf="@id/til_story_caption"
-            app:tint="@color/white"
-            android:contentDescription="@string/btn_upload" />
+            app:tint="@color/white" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/top_bar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        android:background="?attr/backgroundColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:background="?attr/backgroundColor"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
@@ -146,8 +146,8 @@
             android:elevation="2dp"
             android:fontFamily="@font/poppins_medium"
             android:text="@string/activity_add_story"
-            android:textSize="18sp"
             android:textColor="@color/white"
+            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -159,14 +159,14 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:clickable="true"
+            android:contentDescription="@string/btn_back"
             android:focusable="true"
             android:padding="8dp"
             android:src="@drawable/ic_back"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/white"
-            android:contentDescription="@string/btn_back" />
+            app:tint="@color/white" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
