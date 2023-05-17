@@ -91,4 +91,6 @@ dependencies {
     // flow to live data
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
 
+    // Google Maps SDK
+    implementation 'com.google.android.gms:play-services-maps:18.1.0'
 }

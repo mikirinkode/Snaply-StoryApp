@@ -22,7 +22,7 @@ class DetailActivity : AppCompatActivity() {
 
         BottomSheetBehavior.from(binding.bottomSheet).apply {
             peekHeight = 100
-            this.state = BottomSheetBehavior.STATE_COLLAPSED
+            this.state = BottomSheetBehavior.STATE_EXPANDED
         }
 
         binding.apply {

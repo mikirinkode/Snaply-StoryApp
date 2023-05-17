@@ -37,8 +37,94 @@
         app:tint="?android:attr/textColorPrimary"
         tools:visibility="visible" />
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_enable_location"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/rounded_rectangle"
+        android:backgroundTint="?attr/background"
+        android:padding="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/layout_upload">
+
+        <TextView
+            android:id="@+id/tv_enable_location"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/enable_location"
+            android:textSize="16sp"
+            android:layout_marginStart="4dp"
+            app:layout_constraintBottom_toBottomOf="@+id/switch_enable_location"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@id/switch_enable_location"
+            app:layout_constraintTop_toTopOf="@+id/switch_enable_location" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switch_enable_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_select_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="gone"
+            tools:visibility="visible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/switch_enable_location">
+
+            <Button
+                android:id="@+id/btn_copy"
+                style="@style/Widget.Material3.Button.IconButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/poppins_bold"
+                android:paddingVertical="4dp"
+                android:paddingHorizontal="8dp"
+                android:textColor="?attr/colorPrimary"
+                app:icon="@drawable/ic_copy"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_location_lat_long"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/btn_select_location"
+                app:layout_constraintStart_toEndOf="@id/btn_copy"
+                app:layout_constraintEnd_toStartOf="@id/btn_select_location"
+                app:layout_constraintTop_toTopOf="@+id/btn_select_location"
+                tools:text="Lat: Lon:" />
+
+            <Button
+                android:id="@+id/btn_select_location"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/poppins_bold"
+                android:padding="0dp"
+                android:text="@string/change"
+                android:textColor="?attr/colorPrimary"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_upload"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -70,8 +156,8 @@
 
         <ImageView
             android:id="@+id/btn_add_photo"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:clickable="true"
@@ -107,7 +193,7 @@
                 android:id="@+id/edt_story_caption"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPersonName"
+                android:inputType="textMultiLine"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white" />
 
@@ -115,8 +201,8 @@
 
         <ImageView
             android:id="@+id/btn_upload"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:clickable="true"

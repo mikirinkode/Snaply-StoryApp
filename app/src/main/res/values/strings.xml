@@ -57,4 +57,9 @@
     <string name="sure">Yes</string>
     <string name="no">No</string>
     <string name="are_you_sure_want_to_logout">Are you sure want to Logout?</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="upload">UPLOAD</string>
+    <string name="location">Location</string>
+    <string name="enable_location">Enable Location?</string>
 </resources>

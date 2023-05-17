@@ -30,7 +30,8 @@ interface ApiService {
     @GET("stories")
     fun getAllStories(
         @Header("Authorization") token: String,
-        @Query("size") size: Int
+        @Query("size") size: Int,
+        @Query("location") needLocation: Int
     ): Call<StoryResponse>
 
     @Multipart
@@ -38,6 +39,8 @@ interface ApiService {
     fun addNewStory(
         @Header("Authorization") token: String,
         @Part file: MultipartBody.Part,
-        @Part("description") description: RequestBody
+        @Part("description") description: RequestBody,
+        @Part("lat") latitude: RequestBody?,
+        @Part("lon") longitude: RequestBody?
     ): Call<PostStoryResponse>
 }

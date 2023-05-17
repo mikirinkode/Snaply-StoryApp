@@ -1,4 +1,4 @@
-package com.mikirinkode.snaply.ui.main
+package com.mikirinkode.snaply.ui.main.home
 
 import android.app.Activity
 import android.content.Intent
@@ -16,7 +16,7 @@ import com.mikirinkode.snaply.databinding.RvStoryBinding
 import com.mikirinkode.snaply.ui.detail.DetailActivity
 import com.mikirinkode.snaply.utils.StoryDiffUtil
 
-class StoryAdapter : RecyclerView.Adapter<StoryAdapter.StoryViewHolder>() {
+class StoryAdapter(private val activity: Activity) : RecyclerView.Adapter<StoryAdapter.StoryViewHolder>() {
 
     private var storyList = ArrayList<StoryEntity>()
 
@@ -40,7 +40,7 @@ class StoryAdapter : RecyclerView.Adapter<StoryAdapter.StoryViewHolder>() {
 
                 val optionsCompat: ActivityOptionsCompat =
                     ActivityOptionsCompat.makeSceneTransitionAnimation(
-                        itemView.context as Activity,
+                        activity,
                         Pair(binding.ivStoryPhoto, itemView.context.getString(R.string.story_image)),
                     )
                 itemView.context.startActivity(intent, optionsCompat.toBundle())

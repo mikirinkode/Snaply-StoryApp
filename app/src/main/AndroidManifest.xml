@@ -4,8 +4,12 @@
     package="com.mikirinkode.snaply">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
     <uses-feature android:name="android.hardware.camera" />
+
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:name=".di.BaseApplication"
@@ -17,6 +21,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Snaply"
         tools:targetApi="31">
+        <activity
+            android:name=".ui.addstory.SelectLocationActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.addstory.CameraActivity"
             android:exported="false" />
@@ -48,6 +55,9 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCURYMLBai6v9N8W4ECRo7cJ6GX3ZCarns" />
     </application>
 
 </manifest>

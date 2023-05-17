@@ -36,5 +36,7 @@ class Preferences(val context: Context) {
         const val USER_TOKEN = "user_token"
 
         const val DARK_MODE_PREF = "dark_mode_pref"
+        const val SAVED_LATITUDE = "saved_latitude_pref"
+        const val SAVED_LONGITUDE = "saved_longitude_pref"
     }
 }

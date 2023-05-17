@@ -1,6 +1,9 @@
 package com.mikirinkode.snaply.ui.addstory
 
 import android.Manifest
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.content.Intent.ACTION_GET_CONTENT
 import android.content.pm.PackageManager
@@ -43,6 +46,8 @@ class AddStoryActivity : AppCompatActivity() {
     private val storyViewModel: StoryViewModel by viewModels()
 
     private var getFile: File? = null
+    private var selectedLatitude: Double? = null
+    private var selectedLongitude: Double? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,11 +59,50 @@ class AddStoryActivity : AppCompatActivity() {
 
             btnBack.setOnClickListener { onBackPressed() }
 
-            btnUpload.setOnClickListener { uploadImage() }
+            btnUpload.setOnClickListener { processUpload() }
 
             btnAddPhotoCenter.setOnClickListener { showDialog() }
 
             btnAddPhoto.setOnClickListener { showDialog() }
+
+            switchEnableLocation.setOnCheckedChangeListener { _, checked ->
+                val latitude = preferences.getStringValues(Preferences.SAVED_LATITUDE)
+                val longitude = preferences.getStringValues(Preferences.SAVED_LONGITUDE)
+
+                if (checked) {
+                    layoutSelectLocation.visibility = View.VISIBLE
+                    if (latitude.isNullOrEmpty() && longitude.isNullOrEmpty()) {
+                        tvLocationLatLong.text = "You haven't select location before"
+                    } else {
+                        selectedLatitude = latitude?.toDouble()
+                        selectedLongitude = longitude?.toDouble()
+
+                        val location = "Your Address:" +
+                                "\nLat: $latitude" +
+                                "\nLong: $longitude"
+
+                        tvLocationLatLong.text = location
+                    }
+                } else {
+                    layoutSelectLocation.visibility = View.GONE
+                }
+            }
+            btnSelectLocation.setOnClickListener {
+                val intent = Intent(this@AddStoryActivity, SelectLocationActivity::class.java)
+                startActivityForResult(intent, SELECT_LOCATION_CODE)
+            }
+
+            btnCopy.setOnClickListener {
+                val text = "Your Address:" +
+                        "\nLat: $selectedLatitude" +
+                        "\nLong: $selectedLongitude"
+                val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                val clipData = ClipData.newPlainText("text", text)
+                clipboardManager.setPrimaryClip(clipData)
+
+                Toast.makeText(this@AddStoryActivity, "Text copied to clipboard", Toast.LENGTH_SHORT).show()
+
+            }
         }
     }
 
@@ -135,7 +179,7 @@ class AddStoryActivity : AppCompatActivity() {
         }
     }
 
-    private fun uploadImage() {
+    private fun processUpload() {
         binding.apply {
             val token = preferences.getStringValues(Preferences.USER_TOKEN)
 
@@ -147,8 +191,7 @@ class AddStoryActivity : AppCompatActivity() {
             if (inputDesc.isNotEmpty()) {
                 if (getFile != null) {
                     val file = reduceFileImage(getFile as File)
-
-                    val description = inputDesc.toRequestBody("text/plain".toMediaType())
+                    val description = inputDesc
                     val requestImageFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
                     val imageMultipart: MultipartBody.Part = MultipartBody.Part.createFormData(
                         "photo",
@@ -157,28 +200,47 @@ class AddStoryActivity : AppCompatActivity() {
                     )
 
                     if (token != null) {
-                        storyViewModel.addNewStory(token, imageMultipart, description).observe(this@AddStoryActivity) { result ->
-                            when (result){
-                                is Result.Success -> {
-                                    Toast.makeText(this@AddStoryActivity, result.data.toString(), Toast.LENGTH_SHORT).show()
-                                    loadingIndicator.visibility = View.GONE
-                                    startActivity(
-                                        Intent(
-                                            this@AddStoryActivity,
-                                            MainActivity::class.java
-                                        )
-                                    )
-                                    finishAffinity()
-                                }
-                                is Result.Error -> {
-                                    Toast.makeText(this@AddStoryActivity, result.error.toString(), Toast.LENGTH_SHORT).show()
-                                    loadingIndicator.visibility = View.GONE
-                                }
-                                Result.Loading -> {
-                                    loadingIndicator.visibility = View.VISIBLE
-                                }
+                        if (switchEnableLocation.isChecked) {
+                            if (selectedLatitude == null && selectedLongitude == null) {
+                                Toast.makeText(
+                                    this@AddStoryActivity,
+                                    "Please select a location first if you want to enable location.",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                                return
                             }
                         }
+                        storyViewModel.addNewStory(token, imageMultipart, description, selectedLatitude, selectedLongitude)
+                            .observe(this@AddStoryActivity) { result ->
+                                when (result) {
+                                    is Result.Success -> {
+                                        Toast.makeText(
+                                            this@AddStoryActivity,
+                                            result.data.toString(),
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                        loadingIndicator.visibility = View.GONE
+                                        startActivity(
+                                            Intent(
+                                                this@AddStoryActivity,
+                                                MainActivity::class.java
+                                            )
+                                        )
+                                        finishAffinity()
+                                    }
+                                    is Result.Error -> {
+                                        Toast.makeText(
+                                            this@AddStoryActivity,
+                                            result.error.toString(),
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                        loadingIndicator.visibility = View.GONE
+                                    }
+                                    Result.Loading -> {
+                                        loadingIndicator.visibility = View.VISIBLE
+                                    }
+                                }
+                            }
                     }
                 } else {
                     Toast.makeText(
@@ -216,9 +278,32 @@ class AddStoryActivity : AppCompatActivity() {
         ContextCompat.checkSelfPermission(baseContext, it) == PackageManager.PERMISSION_GRANTED
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == SELECT_LOCATION_CODE) {
+            if (resultCode == RESULT_OK) {
+                val latitude = data?.getDoubleExtra(INTENT_LAT, 0.0)
+                val longitude = data?.getDoubleExtra(INTENT_LONG, 0.0)
+                val result = data?.getStringExtra(INTENT_ADDRESS) +
+                        "\nLatitude: $latitude" +
+                        "\nLongitude: $longitude"
+
+
+                selectedLatitude = latitude
+                selectedLongitude = longitude
+
+                binding.tvLocationLatLong.text = result
+            }
+        }
+    }
+
     companion object {
         const val CAMERA_X_RESULT = 200
         private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
         private const val REQUEST_CODE_PERMISSIONS = 10
+        const val SELECT_LOCATION_CODE = 1011
+        const val INTENT_LAT = "intent_lat_lat"
+        const val INTENT_LONG = "intent_long"
+        const val INTENT_ADDRESS = "intent_address"
     }
 }

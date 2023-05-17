@@ -31,10 +31,10 @@ class StoryRepository @Inject constructor(
 //            "Jika Live Data -> gunakan addsource()"
     private val result = MediatorLiveData<Result<List<StoryEntity>>>()
 
-    fun getStoryList(token: String): LiveData<Result<List<StoryEntity>>> {
+    fun getStoryList(token: String, needLocation: Int): LiveData<Result<List<StoryEntity>>> {
 
         result.value = Result.Loading
-        val client = apiService.getAllStories("Bearer $token", 20)
+        val client = apiService.getAllStories("Bearer $token", 20, needLocation)
         client.enqueue(object : Callback<StoryResponse> {
             override fun onResponse(call: Call<StoryResponse>, response: Response<StoryResponse>) {
                 if (response.isSuccessful) {
@@ -92,16 +92,19 @@ class StoryRepository @Inject constructor(
         return result
     }
 
+
     fun addNewStory(
         token: String,
         imageMultipart: MultipartBody.Part,
-        description: RequestBody
+        description: RequestBody,
+        latitude: RequestBody?,
+        longitude: RequestBody?,
     ): MediatorLiveData<Result<String>> {
         val result = MediatorLiveData<Result<String>>()
 
         result.value = Result.Loading
 
-        apiService.addNewStory("Bearer $token", imageMultipart, description)
+        apiService.addNewStory("Bearer $token", imageMultipart, description, latitude, longitude)
             .enqueue(object : Callback<PostStoryResponse> {
                 override fun onResponse(
                     call: Call<PostStoryResponse>,
