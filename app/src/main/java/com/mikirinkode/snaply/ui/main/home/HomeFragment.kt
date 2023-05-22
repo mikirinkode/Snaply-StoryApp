@@ -23,6 +23,7 @@ import com.mikirinkode.snaply.ui.profile.ProfileActivity
 import com.mikirinkode.snaply.utils.Preferences
 import com.mikirinkode.snaply.viewmodel.StoryViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
 import javax.inject.Inject
 
 
@@ -52,19 +53,19 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initVariables()
-        managePermissions()
         observeStoryList()
         initUi()
         onActionClick()
     }
 
     private fun initVariables() {
-//        storyAdapter = StoryAdapter(requireActivity())
         pagingAdapter = HomePagingAdapter(requireActivity())
     }
 
     private fun initUi() {
         binding.apply {
+            tvGreetings.text = getGreetings()
+
             rvStory.apply {
                 layoutManager = LinearLayoutManager(requireContext())
                 setHasFixedSize(true)
@@ -80,59 +81,15 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun onActionClick() {
-        binding.apply {
-            ivUserPhoto.setOnClickListener {
-                val optionsCompat: ActivityOptionsCompat =
-                    ActivityOptionsCompat.makeSceneTransitionAnimation(
-                        requireActivity(),
-                        Pair(ivUserPhoto, getString(R.string.user_photo_profile)),
-                        Pair(tvUserName, getString(R.string.user_name))
-                    )
-                startActivity(
-                    Intent(requireContext(), ProfileActivity::class.java),
-                    optionsCompat.toBundle()
-                )
-            }
+    private fun getGreetings(): String {
+        val currentTime = Calendar.getInstance()
+        val currentHour = currentTime.get(Calendar.HOUR_OF_DAY)
 
-            swipeToRefresh.setOnRefreshListener { observeStoryList() }
-
-            btnRetry.setOnClickListener {
-                errorMessage.visibility = View.GONE
-                observeStoryList()
-            }
+        return when {
+            currentHour < 12 -> "Good Morning,"
+            currentHour < 18 -> "Good Afternoon,"
+            else -> "Good Evening,"
         }
-    }
-
-    private fun managePermissions() {
-        // check the permissions
-        val requestPermissions = mutableListOf<String>()
-        if (!isLocationPermissionGranted()) {
-            // if permissions are not granted
-            requestPermissions.add(android.Manifest.permission.ACCESS_FINE_LOCATION)
-            requestPermissions.add(android.Manifest.permission.ACCESS_COARSE_LOCATION)
-        }
-
-        if (requestPermissions.isNotEmpty()) {
-            // request the permission
-            ActivityCompat.requestPermissions(
-                requireActivity(),
-                requestPermissions.toTypedArray(),
-                LOCATION_REQUEST_CODE
-            )
-        }
-    }
-
-    private fun isLocationPermissionGranted(): Boolean {
-        val fineLocation = ActivityCompat.checkSelfPermission(
-            requireContext(),
-            android.Manifest.permission.ACCESS_FINE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
-        val coarseLocation = ActivityCompat.checkSelfPermission(
-            requireContext(),
-            android.Manifest.permission.ACCESS_COARSE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
-        return fineLocation && coarseLocation
     }
 
     private fun observeStoryList() {
@@ -163,31 +120,32 @@ class HomeFragment : Fragment() {
         }
     }
 
-    // handle the request permission result
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == LOCATION_REQUEST_CODE) {
-            if (grantResults.isNotEmpty()) {
-                for (result in grantResults) {
-                    if (result == AppCompatActivity.RESULT_OK) {
-                        Toast.makeText(
-                            requireContext(),
-                            "Permissions are Granted",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
+    private fun onActionClick() {
+        binding.apply {
+            ivUserPhoto.setOnClickListener {
+                val optionsCompat: ActivityOptionsCompat =
+                    ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        requireActivity(),
+                        Pair(ivUserPhoto, getString(R.string.user_photo_profile)),
+                        Pair(tvUserName, getString(R.string.user_name))
+                    )
+                startActivity(
+                    Intent(requireContext(), ProfileActivity::class.java),
+                    optionsCompat.toBundle()
+                )
+            }
+
+            swipeToRefresh.setOnRefreshListener { observeStoryList() }
+
+            btnRetry.setOnClickListener {
+                errorMessage.visibility = View.GONE
+                observeStoryList()
             }
         }
     }
 
     companion object {
         private const val TAG = "HomeFragment"
-        private const val LOCATION_REQUEST_CODE = 0
     }
 
     override fun onDestroy() {

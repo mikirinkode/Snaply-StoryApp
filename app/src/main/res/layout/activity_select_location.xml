@@ -21,7 +21,7 @@
         android:id="@+id/btn_select_location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_margin="24dp"
         android:enabled="false"
         android:text="Select Location"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -32,13 +32,27 @@
         android:id="@+id/btn_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_margin="24dp"
         android:contentDescription="@string/btn_back"
         android:elevation="2dp"
         android:src="@drawable/ic_back"
-        app:backgroundTint="?android:attr/colorPrimary"
+        app:backgroundTint="?attr/background"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:tint="?android:attr/colorPrimary" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_go_to_user_lcoation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/btn_go_to_user_location"
+        android:elevation="2dp"
+        android:src="@drawable/ic_my_location"
+        app:backgroundTint="?android:attr/colorPrimary"
+        app:layout_constraintBottom_toTopOf="@id/btn_select_location"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="24dp"
         app:tint="?attr/background" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

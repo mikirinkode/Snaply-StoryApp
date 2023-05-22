@@ -53,7 +53,9 @@
     <string name="an_error_occurred">An Error Occurred.</string>
     <string name="try_again">Try Again</string>
     <string name="exit_app">Exit App</string>
+    <string name="enable_location_service">Enable Location Service</string>
     <string name="are_you_sure_want_to_exit">Are you sure want to exit?</string>
+    <string name="enable_location_service_desc">Snaply needs you to enable the location service to be able to determine your location.</string>
     <string name="sure">Yes</string>
     <string name="no">No</string>
     <string name="are_you_sure_want_to_logout">Are you sure want to Logout?</string>
@@ -63,4 +65,7 @@
     <string name="location">Location</string>
     <string name="enable_location">Enable Location?</string>
     <string name="retry">Retry</string>
+    <string name="btn_go_to_user_location">Go to User Location</string>
+    <string name="cancel">Cancel</string>
+    <string name="open_settings">Open Settings</string>
 </resources>
