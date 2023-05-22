@@ -81,8 +81,8 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideStoryRepository(apiService: ApiService, database: SnaplyDatabase, dao: StoryDao, appExecutors: AppExecutors): StoryRepository {
-        return StoryRepository(apiService, database, dao, appExecutors)
+    fun provideStoryRepository(apiService: ApiService, database: SnaplyDatabase, dao: StoryDao, pref: Preferences, appExecutors: AppExecutors): StoryRepository {
+        return StoryRepository(apiService, database, dao, pref, appExecutors)
     }
 
     @Provides

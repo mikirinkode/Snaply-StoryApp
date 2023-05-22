@@ -35,7 +35,8 @@ class HomeFragment : Fragment() {
     lateinit var preferences: Preferences
 
     private val storyViewModel: StoryViewModel by viewModels()
-//    private lateinit var storyAdapter: StoryAdapter
+
+    //    private lateinit var storyAdapter: StoryAdapter
     private lateinit var pagingAdapter: HomePagingAdapter
 
     override fun onCreateView(
@@ -62,14 +63,14 @@ class HomeFragment : Fragment() {
         pagingAdapter = HomePagingAdapter(requireActivity())
     }
 
-    private fun initUi(){
+    private fun initUi() {
         binding.apply {
             rvStory.apply {
                 layoutManager = LinearLayoutManager(requireContext())
                 setHasFixedSize(true)
 //                adapter = storyAdapter
                 adapter = pagingAdapter.withLoadStateFooter(
-                    footer = LoadingStateAdapter{
+                    footer = LoadingStateAdapter {
                         pagingAdapter.retry()
                     }
                 )
@@ -79,8 +80,8 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun onActionClick(){
-        binding.apply{
+    private fun onActionClick() {
+        binding.apply {
             ivUserPhoto.setOnClickListener {
                 val optionsCompat: ActivityOptionsCompat =
                     ActivityOptionsCompat.makeSceneTransitionAnimation(
@@ -106,30 +107,38 @@ class HomeFragment : Fragment() {
     private fun managePermissions() {
         // check the permissions
         val requestPermissions = mutableListOf<String>()
-        if (!isLocationPermissionGranted()){
+        if (!isLocationPermissionGranted()) {
             // if permissions are not granted
             requestPermissions.add(android.Manifest.permission.ACCESS_FINE_LOCATION)
             requestPermissions.add(android.Manifest.permission.ACCESS_COARSE_LOCATION)
         }
 
-        if (requestPermissions.isNotEmpty()){
+        if (requestPermissions.isNotEmpty()) {
             // request the permission
-            ActivityCompat.requestPermissions(requireActivity(), requestPermissions.toTypedArray(), LOCATION_REQUEST_CODE)
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                requestPermissions.toTypedArray(),
+                LOCATION_REQUEST_CODE
+            )
         }
     }
 
     private fun isLocationPermissionGranted(): Boolean {
-        val fineLocation = ActivityCompat.checkSelfPermission(requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-        val coarseLocation = ActivityCompat.checkSelfPermission(requireContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        val fineLocation = ActivityCompat.checkSelfPermission(
+            requireContext(),
+            android.Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+        val coarseLocation = ActivityCompat.checkSelfPermission(
+            requireContext(),
+            android.Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
         return fineLocation && coarseLocation
     }
+
     private fun observeStoryList() {
-        val userToken = preferences.getStringValues(Preferences.USER_TOKEN)
-        if (userToken != null) {
-            storyViewModel.getPagingStory(userToken).observe(viewLifecycleOwner) {
-                binding.swipeToRefresh.isRefreshing = false
-                pagingAdapter.submitData(lifecycle, it)
-            }
+        storyViewModel.stories.observe(viewLifecycleOwner) {
+            binding.swipeToRefresh.isRefreshing = false
+            pagingAdapter.submitData(lifecycle, it)
         }
     }
 
@@ -161,24 +170,28 @@ class HomeFragment : Fragment() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == LOCATION_REQUEST_CODE){
-            if (grantResults.isNotEmpty()){
-                for (result in grantResults){
-                    if (result == AppCompatActivity.RESULT_OK){
-                        Toast.makeText(requireContext(), "Permissions are Granted", Toast.LENGTH_SHORT).show()
+        if (requestCode == LOCATION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty()) {
+                for (result in grantResults) {
+                    if (result == AppCompatActivity.RESULT_OK) {
+                        Toast.makeText(
+                            requireContext(),
+                            "Permissions are Granted",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
             }
         }
     }
 
-        companion object {
-            private const val TAG = "HomeFragment"
-            private const val LOCATION_REQUEST_CODE = 0
-        }
+    companion object {
+        private const val TAG = "HomeFragment"
+        private const val LOCATION_REQUEST_CODE = 0
+    }
 
-        override fun onDestroy() {
-            super.onDestroy()
-            _binding = null
-        }
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
 }

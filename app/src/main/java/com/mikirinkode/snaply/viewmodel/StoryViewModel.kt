@@ -22,9 +22,9 @@ import javax.inject.Inject
 class StoryViewModel @Inject constructor(private val storyRepository: StoryRepository) :
     ViewModel() {
 
-    fun getPagingStory(token: String): LiveData<PagingData<StoryEntity>> {
-        return storyRepository.getPagingStory(token).cachedIn(viewModelScope)
-    }
+    val stories: LiveData<PagingData<StoryEntity>>
+        = storyRepository.getPagingStory().cachedIn(viewModelScope)
+
 
     fun getStoryWithLocationList(token: String) = storyRepository.getStoryList(token, 1)
 

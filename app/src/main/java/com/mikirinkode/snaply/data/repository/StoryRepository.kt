@@ -15,6 +15,7 @@ import com.mikirinkode.snaply.data.source.remote.response.PostStoryResponse
 import com.mikirinkode.snaply.data.source.remote.response.RegisterResponse
 import com.mikirinkode.snaply.data.source.remote.response.StoryResponse
 import com.mikirinkode.snaply.utils.AppExecutors
+import com.mikirinkode.snaply.utils.Preferences
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -26,6 +27,7 @@ class StoryRepository @Inject constructor(
     private val apiService: ApiService,
     private val snaplyDatabase: SnaplyDatabase,
     private val storyDao: StoryDao,
+    private val preferences: Preferences,
     private val appExecutors: AppExecutors
 ) {
 
@@ -35,13 +37,14 @@ class StoryRepository @Inject constructor(
 //            "Jika Live Data -> gunakan addsource()"
     private val result = MediatorLiveData<Result<List<StoryEntity>>>()
 
-    fun getPagingStory(token: String): LiveData<PagingData<StoryEntity>>{
+    fun getPagingStory(): LiveData<PagingData<StoryEntity>>{
+        val userToken = preferences.getStringValues(Preferences.USER_TOKEN)
         @OptIn(ExperimentalPagingApi::class)
         return Pager(
             config = PagingConfig(
                 pageSize = 5
             ),
-            remoteMediator = StoryRemoteMediator(token, snaplyDatabase, apiService),
+            remoteMediator = userToken?.let { StoryRemoteMediator(it, snaplyDatabase, apiService) },
             pagingSourceFactory = {
                 storyDao.getAllStory()
             }
