@@ -8,12 +8,12 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.mikirinkode.snaply"
         minSdk 21
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -32,6 +32,7 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+        freeCompilerArgs += ["-Xopt-in=kotlin.RequiresOptIn"]
     }
 
     buildFeatures {
@@ -78,11 +79,14 @@ dependencies {
     implementation "androidx.camera:camera-lifecycle:$cameraxVersion"
     implementation "androidx.camera:camera-view:$cameraxVersion"
 
+    // paging
+    implementation "androidx.paging:paging-runtime-ktx:3.1.1"
+
     // Room
-    implementation "androidx.room:room-runtime:$roomRuntimeVersion"
-    kapt "androidx.room:room-compiler:$roomVersion"
-    // Room + Flow
-    implementation "androidx.room:room-ktx:$roomRuntimeVersion"
+    implementation 'androidx.room:room-ktx:2.4.2'
+    kapt 'androidx.room:room-compiler:2.4.2'
+
+    implementation 'androidx.room:room-paging:2.4.2'
 
     // coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutinesVersion"
@@ -94,5 +98,4 @@ dependencies {
     // Google Maps SDK
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
 
-    implementation "androidx.paging:paging-runtime-ktx:3.1.0"
 }

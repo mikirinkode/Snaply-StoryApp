@@ -26,18 +26,7 @@ class StoryViewModel @Inject constructor(private val storyRepository: StoryRepos
         return storyRepository.getPagingStory(token).cachedIn(viewModelScope)
     }
 
-    fun getStoryList(token: String) = storyRepository.getStoryList(token, 0)
-
     fun getStoryWithLocationList(token: String) = storyRepository.getStoryList(token, 1)
-
-    fun addNewStory(
-        token: String,
-        imageMultipart: MultipartBody.Part,
-        description: RequestBody,
-        latitude: RequestBody? = null,
-        longitude: RequestBody? = null,
-    ) =
-        storyRepository.addNewStory(token, imageMultipart, description, latitude, longitude)
 
     fun addNewStory(
         token: String,

@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.mikirinkode.snaply.data.repository.StoryRepository
 import com.mikirinkode.snaply.data.repository.UserRepository
-import com.mikirinkode.snaply.data.source.local.SnaplyDao
+import com.mikirinkode.snaply.data.source.local.StoryDao
 import com.mikirinkode.snaply.data.source.local.SnaplyDatabase
 import com.mikirinkode.snaply.data.source.remote.ApiService
 import com.mikirinkode.snaply.utils.AppExecutors
@@ -69,8 +69,8 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideDao(db: SnaplyDatabase): SnaplyDao {
-        return db.snaplyDao()
+    fun provideDao(db: SnaplyDatabase): StoryDao {
+        return db.storyDao()
     }
 
     @Provides
@@ -81,13 +81,13 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideStoryRepository(apiService: ApiService, dao: SnaplyDao, appExecutors: AppExecutors): StoryRepository {
-        return StoryRepository(apiService, dao, appExecutors)
+    fun provideStoryRepository(apiService: ApiService, database: SnaplyDatabase, dao: StoryDao, appExecutors: AppExecutors): StoryRepository {
+        return StoryRepository(apiService, database, dao, appExecutors)
     }
 
     @Provides
     @Singleton
-    fun provideUserRepository(apiService: ApiService, dao: SnaplyDao, preferences: Preferences, appExecutors: AppExecutors): UserRepository {
+    fun provideUserRepository(apiService: ApiService, dao: StoryDao, preferences: Preferences, appExecutors: AppExecutors): UserRepository {
         return UserRepository(apiService, dao, appExecutors, preferences)
     }
 }

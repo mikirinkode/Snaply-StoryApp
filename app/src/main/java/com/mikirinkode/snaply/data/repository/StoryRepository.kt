@@ -3,17 +3,14 @@ package com.mikirinkode.snaply.data.repository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
-import androidx.paging.liveData
+import androidx.paging.*
 import com.google.gson.Gson
 import com.mikirinkode.snaply.data.Result
-import com.mikirinkode.snaply.data.source.local.SnaplyDao
+import com.mikirinkode.snaply.data.source.local.StoryDao
 import com.mikirinkode.snaply.data.model.StoryEntity
-import com.mikirinkode.snaply.data.source.StoryPagingSource
+import com.mikirinkode.snaply.data.source.StoryRemoteMediator
+import com.mikirinkode.snaply.data.source.local.SnaplyDatabase
 import com.mikirinkode.snaply.data.source.remote.ApiService
-import com.mikirinkode.snaply.data.source.remote.response.StoryResponseItem
 import com.mikirinkode.snaply.data.source.remote.response.PostStoryResponse
 import com.mikirinkode.snaply.data.source.remote.response.RegisterResponse
 import com.mikirinkode.snaply.data.source.remote.response.StoryResponse
@@ -27,7 +24,8 @@ import javax.inject.Inject
 
 class StoryRepository @Inject constructor(
     private val apiService: ApiService,
-    private val snaplyDao: SnaplyDao,
+    private val snaplyDatabase: SnaplyDatabase,
+    private val storyDao: StoryDao,
     private val appExecutors: AppExecutors
 ) {
 
@@ -36,30 +34,16 @@ class StoryRepository @Inject constructor(
 //            "Apabila data BUKAN livedata -> gunakan setValue()" +
 //            "Jika Live Data -> gunakan addsource()"
     private val result = MediatorLiveData<Result<List<StoryEntity>>>()
-    private val pagingResult = MediatorLiveData<Result<PagingData<StoryEntity>>>()
-
-//    fun getPagingStory(token: String): LiveData<Result<PagingData<StoryEntity>>>{
-//        pagingResult.value = Result.Loading
-//
-//        val data = Pager(
-//            config = PagingConfig(
-//                pageSize = 5
-//            ),
-//            pagingSourceFactory = {
-//                StoryPagingSource(token, apiService)
-//            }
-//        ).liveData
-//
-//        return pagingResult
-//    }
 
     fun getPagingStory(token: String): LiveData<PagingData<StoryEntity>>{
+        @OptIn(ExperimentalPagingApi::class)
         return Pager(
             config = PagingConfig(
                 pageSize = 5
             ),
+            remoteMediator = StoryRemoteMediator(token, snaplyDatabase, apiService),
             pagingSourceFactory = {
-                StoryPagingSource(token, apiService)
+                storyDao.getAllStory()
             }
         ).liveData
     }
@@ -88,8 +72,8 @@ class StoryRepository @Inject constructor(
                                 )
                                 list.add(story)
                             }
-                            snaplyDao.deleteAll()
-                            snaplyDao.insertAllStory(list)
+                            storyDao.deleteAll()
+                            storyDao.insertAllStory(list)
                         }
                     }
                 }else {
@@ -114,7 +98,7 @@ class StoryRepository @Inject constructor(
         })
 
         // check local data
-        val localData = snaplyDao.getAllStory()
+        val localData = storyDao.getAllStoryWithLocation()
 
         // apabila data sumber berupa live data, maka perlu menggunakan addSource,
         // jika bukan gunakan setValue

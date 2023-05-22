@@ -1,24 +1,16 @@
 package com.mikirinkode.snaply.data.repository
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import com.google.gson.Gson
 import com.mikirinkode.snaply.data.Result
-import com.mikirinkode.snaply.data.source.local.SnaplyDao
-import com.mikirinkode.snaply.data.model.StoryEntity
+import com.mikirinkode.snaply.data.source.local.StoryDao
 import com.mikirinkode.snaply.data.model.UserEntity
 import com.mikirinkode.snaply.data.source.remote.ApiService
 import com.mikirinkode.snaply.data.source.remote.response.LoginResponse
-import com.mikirinkode.snaply.data.source.remote.response.PostStoryResponse
 import com.mikirinkode.snaply.data.source.remote.response.RegisterResponse
-import com.mikirinkode.snaply.data.source.remote.response.StoryResponse
 import com.mikirinkode.snaply.utils.AppExecutors
-import com.mikirinkode.snaply.utils.Event
 import com.mikirinkode.snaply.utils.Preferences
-import com.mikirinkode.snaply.viewmodel.UserViewModel
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -26,7 +18,7 @@ import javax.inject.Inject
 
 class UserRepository @Inject constructor(
     private val apiService: ApiService,
-    private val snaplyDao: SnaplyDao,
+    private val storyDao: StoryDao,
     private val appExecutors: AppExecutors,
     private val preferences: Preferences
 ) {
