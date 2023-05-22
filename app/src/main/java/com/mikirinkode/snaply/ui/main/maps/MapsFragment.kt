@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
 import androidx.fragment.app.Fragment
@@ -17,17 +16,14 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.mikirinkode.snaply.R
 import com.mikirinkode.snaply.data.Result
 import com.mikirinkode.snaply.data.model.StoryEntity
-import com.mikirinkode.snaply.databinding.FragmentHomeBinding
 import com.mikirinkode.snaply.databinding.FragmentMapsBinding
 import com.mikirinkode.snaply.ui.detail.DetailActivity
-import com.mikirinkode.snaply.ui.maps.MapsActivity
 import com.mikirinkode.snaply.utils.Preferences
 import com.mikirinkode.snaply.viewmodel.StoryViewModel
 import dagger.hilt.android.AndroidEntryPoint

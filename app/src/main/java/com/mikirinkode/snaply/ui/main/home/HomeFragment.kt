@@ -4,7 +4,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,12 +12,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mikirinkode.snaply.R
 import com.mikirinkode.snaply.data.Result
 import com.mikirinkode.snaply.databinding.FragmentHomeBinding
-import com.mikirinkode.snaply.ui.maps.MapsActivity
 import com.mikirinkode.snaply.ui.profile.ProfileActivity
 import com.mikirinkode.snaply.utils.Preferences
 import com.mikirinkode.snaply.viewmodel.StoryViewModel
