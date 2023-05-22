@@ -3,11 +3,17 @@ package com.mikirinkode.snaply.data.repository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.liveData
 import com.google.gson.Gson
 import com.mikirinkode.snaply.data.Result
 import com.mikirinkode.snaply.data.source.local.SnaplyDao
 import com.mikirinkode.snaply.data.model.StoryEntity
+import com.mikirinkode.snaply.data.source.StoryPagingSource
 import com.mikirinkode.snaply.data.source.remote.ApiService
+import com.mikirinkode.snaply.data.source.remote.response.StoryResponseItem
 import com.mikirinkode.snaply.data.source.remote.response.PostStoryResponse
 import com.mikirinkode.snaply.data.source.remote.response.RegisterResponse
 import com.mikirinkode.snaply.data.source.remote.response.StoryResponse
@@ -30,6 +36,33 @@ class StoryRepository @Inject constructor(
 //            "Apabila data BUKAN livedata -> gunakan setValue()" +
 //            "Jika Live Data -> gunakan addsource()"
     private val result = MediatorLiveData<Result<List<StoryEntity>>>()
+    private val pagingResult = MediatorLiveData<Result<PagingData<StoryEntity>>>()
+
+//    fun getPagingStory(token: String): LiveData<Result<PagingData<StoryEntity>>>{
+//        pagingResult.value = Result.Loading
+//
+//        val data = Pager(
+//            config = PagingConfig(
+//                pageSize = 5
+//            ),
+//            pagingSourceFactory = {
+//                StoryPagingSource(token, apiService)
+//            }
+//        ).liveData
+//
+//        return pagingResult
+//    }
+
+    fun getPagingStory(token: String): LiveData<PagingData<StoryEntity>>{
+        return Pager(
+            config = PagingConfig(
+                pageSize = 5
+            ),
+            pagingSourceFactory = {
+                StoryPagingSource(token, apiService)
+            }
+        ).liveData
+    }
 
     fun getStoryList(token: String, needLocation: Int): LiveData<Result<List<StoryEntity>>> {
 
@@ -138,16 +171,5 @@ class StoryRepository @Inject constructor(
 
     companion object {
         private const val TAG = "StoryRepository"
-//
-//        @Volatile
-//        private var instance: StoryRepository? = null
-//        fun getInstance(
-//            apiService: ApiService,
-//            snaplyDao: SnaplyDao,
-//            appExecutors: AppExecutors
-//        ): StoryRepository =
-//            instance ?: synchronized(this) {
-//                instance ?: StoryRepository(apiService, snaplyDao, appExecutors)
-//            }.also { instance = it }
     }
 }

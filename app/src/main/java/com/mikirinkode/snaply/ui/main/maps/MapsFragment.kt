@@ -111,14 +111,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
     }
 
     override fun onMarkerClick(marker: Marker): Boolean {
-        Log.e(TAG, "onMarkerClick")
         if (storyList.isNotEmpty()) {
-            Log.e(TAG, "storyList is not empty")
 
             val selectedStory = storyList.find { it.id == marker.title }
-            Log.e(TAG, "selectedStory is ${selectedStory}")
-            Log.e(TAG, "selectedStory id is ${selectedStory?.id}")
-            Log.e(TAG, "marker id is ${marker?.title}")
 
             if (selectedStory != null) {
                 binding.cardStoryImage.visibility = View.VISIBLE
@@ -141,10 +136,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
             } else {
                 binding.cardStoryImage.visibility = View.GONE
             }
-        } else {
-
-            Log.e(TAG, "storyList is empty")
         }
+
         return true
     }
 
@@ -157,9 +150,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
                         is Result.Success -> {
                             binding.loading.visibility = View.GONE
                             if (result.data.isNotEmpty()) {
-                                Log.e(TAG, result.data.size.toString())
-                                Log.e(TAG, result.data.size.toString())
-                                Log.e(TAG, result.data.toString())
+
                                 createAllStoryMarkers(result.data)
                                 storyList.addAll(result.data)
                             }

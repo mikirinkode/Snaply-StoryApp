@@ -27,7 +27,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iv_user_photo"
-            tools:listitem="@layout/rv_story"
+            tools:listitem="@layout/item_story"
             tools:visibility="gone" />
 
 
@@ -56,15 +56,15 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <include layout="@layout/rv_story_placeholder" />
+                <include layout="@layout/item_story_placeholder" />
 
-                <include layout="@layout/rv_story_placeholder" />
+                <include layout="@layout/item_story_placeholder" />
 
-                <include layout="@layout/rv_story_placeholder" />
+                <include layout="@layout/item_story_placeholder" />
 
-                <include layout="@layout/rv_story_placeholder" />
+                <include layout="@layout/item_story_placeholder" />
 
-                <include layout="@layout/rv_story_placeholder" />
+                <include layout="@layout/item_story_placeholder" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
         </ScrollView>

@@ -62,4 +62,5 @@
     <string name="upload">UPLOAD</string>
     <string name="location">Location</string>
     <string name="enable_location">Enable Location?</string>
+    <string name="retry">Retry</string>
 </resources>

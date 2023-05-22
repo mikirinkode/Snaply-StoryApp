@@ -74,8 +74,7 @@ class CameraActivity : AppCompatActivity() {
                     getString(R.string.fail_open_cam),
                     Toast.LENGTH_SHORT
                 ).show()
-                Log.e(TAG, e.message.toString())
-            }
+                }
         }, ContextCompat.getMainExecutor(this))
     }
 

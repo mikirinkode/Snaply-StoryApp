@@ -17,6 +17,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mikirinkode.snaply.R
 import com.mikirinkode.snaply.data.Result
+import com.mikirinkode.snaply.data.source.LoadingStateAdapter
 import com.mikirinkode.snaply.databinding.FragmentHomeBinding
 import com.mikirinkode.snaply.ui.profile.ProfileActivity
 import com.mikirinkode.snaply.utils.Preferences
@@ -34,7 +35,8 @@ class HomeFragment : Fragment() {
     lateinit var preferences: Preferences
 
     private val storyViewModel: StoryViewModel by viewModels()
-    private lateinit var storyAdapter: StoryAdapter
+//    private lateinit var storyAdapter: StoryAdapter
+    private lateinit var pagingAdapter: HomePagingAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,7 +58,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun initVariables() {
-        storyAdapter = StoryAdapter(requireActivity())
+//        storyAdapter = StoryAdapter(requireActivity())
+        pagingAdapter = HomePagingAdapter(requireActivity())
     }
 
     private fun initUi(){
@@ -64,7 +67,12 @@ class HomeFragment : Fragment() {
             rvStory.apply {
                 layoutManager = LinearLayoutManager(requireContext())
                 setHasFixedSize(true)
-                adapter = storyAdapter
+//                adapter = storyAdapter
+                adapter = pagingAdapter.withLoadStateFooter(
+                    footer = LoadingStateAdapter{
+                        pagingAdapter.retry()
+                    }
+                )
             }
 
             tvUserName.text = preferences.getStringValues(Preferences.USER_NAME)
@@ -118,24 +126,9 @@ class HomeFragment : Fragment() {
     private fun observeStoryList() {
         val userToken = preferences.getStringValues(Preferences.USER_TOKEN)
         if (userToken != null) {
-            storyViewModel.getStoryList(userToken).observe(viewLifecycleOwner) { result ->
+            storyViewModel.getPagingStory(userToken).observe(viewLifecycleOwner) {
                 binding.swipeToRefresh.isRefreshing = false
-                when (result) {
-                    is Result.Success -> {
-                        binding.loading.visibility = View.GONE
-                        if (result.data.isNotEmpty()) {
-                            Log.d(TAG, result.data.size.toString())
-                            storyAdapter.setData(result.data)
-                        }
-                    }
-                    is Result.Loading -> {
-                        binding.loading.visibility = View.VISIBLE
-                    }
-                    is Result.Error -> {
-                        binding.loading.visibility = View.GONE
-                        Toast.makeText(requireContext(), result.error, Toast.LENGTH_SHORT).show()
-                    }
-                }
+                pagingAdapter.submitData(lifecycle, it)
             }
         }
     }
@@ -160,23 +153,6 @@ class HomeFragment : Fragment() {
             errorMessage.visibility = View.VISIBLE
         }
     }
-
-    // TODO
-//    override fun onBackPressed() {
-//        val builder = MaterialAlertDialogBuilder(requireContext())
-//        builder.setTitle(getString(R.string.exit_app))
-//        builder.setMessage(getString(R.string.are_you_sure_want_to_exit))
-//            .setCancelable(false)
-//            .setPositiveButton(getString(R.string.sure)) { _, _ ->
-//                finish()
-//            }
-//            .setNegativeButton(getString(R.string.no)) { dialogInterface, _ ->
-//                dialogInterface.cancel()
-//            }
-//
-//        val alertDialog: AlertDialog = builder.create()
-//        alertDialog.show()
-//    }
 
     // handle the request permission result
     override fun onRequestPermissionsResult(

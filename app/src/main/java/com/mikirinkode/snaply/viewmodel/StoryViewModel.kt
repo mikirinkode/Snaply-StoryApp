@@ -1,9 +1,16 @@
 package com.mikirinkode.snaply.viewmodel
 
+import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.mikirinkode.snaply.data.Result
+import com.mikirinkode.snaply.data.model.StoryEntity
 import com.mikirinkode.snaply.data.repository.StoryRepository
+import com.mikirinkode.snaply.data.source.remote.response.StoryResponseItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
@@ -14,6 +21,10 @@ import javax.inject.Inject
 @HiltViewModel
 class StoryViewModel @Inject constructor(private val storyRepository: StoryRepository) :
     ViewModel() {
+
+    fun getPagingStory(token: String): LiveData<PagingData<StoryEntity>> {
+        return storyRepository.getPagingStory(token).cachedIn(viewModelScope)
+    }
 
     fun getStoryList(token: String) = storyRepository.getStoryList(token, 0)
 
