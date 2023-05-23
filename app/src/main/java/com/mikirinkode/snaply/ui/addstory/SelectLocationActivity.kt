@@ -7,18 +7,17 @@ import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatDelegate
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mikirinkode.snaply.R
 import com.mikirinkode.snaply.databinding.ActivitySelectLocationBinding
@@ -60,6 +59,21 @@ class SelectLocationActivity : AppCompatActivity(), OnMapReadyCallback,
         mMap = googleMap
         mMap.setOnMarkerClickListener(this)
         mMap.setOnMapClickListener(this)
+        try {
+            // check preference for dark mode
+            val isDark = preferences.getBooleanValues(Preferences.DARK_MODE_PREF)
+            if (isDark) {
+                mMap.setMapStyle(
+                    MapStyleOptions.loadRawResourceStyle(this, R.raw.map_style_night)
+                )
+            } else {
+                mMap.setMapStyle(
+                    MapStyleOptions.loadRawResourceStyle(this, R.raw.map_style_light)
+                )
+            }
+        } catch (e: Exception) {
+            Log.e("SelectLocation", "${e.message}")
+        }
 
         val initialLocation = LatLng(-4.375726916664182, 117.53723749844212)
 
@@ -181,7 +195,11 @@ class SelectLocationActivity : AppCompatActivity(), OnMapReadyCallback,
                             }
                     } else {
                         showEnableLocationServiceDialog()
-                        Toast.makeText(this@SelectLocationActivity, "Location Service is Disabled", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this@SelectLocationActivity,
+                            "Location Service is Disabled",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 } else {
                     PermissionManager.requestLocationPermission(this@SelectLocationActivity)
