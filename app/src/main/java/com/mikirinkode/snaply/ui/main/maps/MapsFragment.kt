@@ -17,6 +17,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.mikirinkode.snaply.R
@@ -88,7 +89,21 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
         mMap = googleMap
         mMap.setOnMarkerClickListener(this)
         mMap.setOnMapClickListener(this)
-
+        try {
+            // check preference for dark mode
+            val isDark = preferences.getBooleanValues(Preferences.DARK_MODE_PREF)
+            if (isDark) {
+                mMap.setMapStyle(
+                    MapStyleOptions.loadRawResourceStyle(requireContext(), R.raw.map_style_night)
+                )
+            } else {
+                mMap.setMapStyle(
+                    MapStyleOptions.loadRawResourceStyle(requireContext(), R.raw.map_style_light)
+                )
+            }
+        } catch (e: Exception) {
+            Log.e("SelectLocation", "${e.message}")
+        }
         val initialLocation = LatLng(-4.375726916664182, 117.53723749844212)
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(initialLocation))
@@ -106,6 +121,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
         binding.apply {
             if (cardStoryImage.visibility == View.VISIBLE){
                 cardStoryImage.visibility = View.GONE
+            }
+            if (errorMessage.visibility == View.VISIBLE){
+                errorMessage.visibility = View.GONE
             }
         }
     }
@@ -150,9 +168,11 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
                         is Result.Success -> {
                             binding.loading.visibility = View.GONE
                             if (result.data.isNotEmpty()) {
-
+                                binding.errorMessage.visibility = View.GONE
                                 createAllStoryMarkers(result.data)
                                 storyList.addAll(result.data)
+                            } else {
+                                showNoDataDialog()
                             }
                         }
                         is Result.Loading -> {
@@ -160,8 +180,12 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
                         }
                         is Result.Error -> {
                             binding.loading.visibility = View.GONE
-                            Toast.makeText(requireContext(), result.error, Toast.LENGTH_SHORT)
-                                .show()
+                            if (result.error.contains("Unable to resolve host")) {
+                                showNoInternetConnectionDialog()
+                            } else {
+                                Toast.makeText(requireContext(), result.error, Toast.LENGTH_SHORT)
+                                    .show()
+                            }
                         }
                     }
                 }
@@ -177,6 +201,22 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
 
     private fun createMarker(latLng: LatLng, title: String, snippet: String): MarkerOptions {
         return MarkerOptions().position(latLng).title(title).snippet(snippet)
+    }
+
+    private fun showNoInternetConnectionDialog(){
+        binding.apply {
+            errorMessage.visibility = View.VISIBLE
+            icErrorMsg.visibility = View.VISIBLE
+        }
+    }
+
+    private fun showNoDataDialog(){
+        binding.apply {
+            errorMessage.visibility = View.VISIBLE
+            icErrorMsg.visibility = View.GONE
+            tvErrorTitle.text = getString(R.string.no_data)
+            tvErrorDesc.text = getString(R.string.no_data_desc)
+        }
     }
 
     private fun actionClick() {
