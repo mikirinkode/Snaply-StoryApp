@@ -1,10 +1,7 @@
 package com.mikirinkode.snaply.viewmodel
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.mikirinkode.snaply.data.Result
@@ -22,11 +19,21 @@ import javax.inject.Inject
 class StoryViewModel @Inject constructor(private val storyRepository: StoryRepository) :
     ViewModel() {
 
-    val stories: LiveData<PagingData<StoryEntity>>
-        = storyRepository.getPagingStory().cachedIn(viewModelScope)
+    private val stories: LiveData<PagingData<StoryEntity>>
+//    = MutableLiveData<PagingData<StoryEntity>>()
+            = storyRepository.getPagingStory().cachedIn(viewModelScope)
 
+    val emptyData = MutableLiveData<PagingData<StoryEntity>>()
+    fun getEmptyData(): LiveData<PagingData<StoryEntity>> {
+        emptyData.value = PagingData.empty()
+        return emptyData
+    }
 
-    fun getStoryWithLocationList(token: String) = storyRepository.getStoryList(token, 1)
+    fun getStories(): LiveData<PagingData<StoryEntity>> {
+        return stories
+    }
+
+    fun getStoryWithLocationList() = storyRepository.getStoryList(1)
 
     fun addNewStory(
         token: String,

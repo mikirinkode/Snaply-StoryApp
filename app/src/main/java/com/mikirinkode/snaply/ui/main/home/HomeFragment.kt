@@ -1,22 +1,19 @@
 package com.mikirinkode.snaply.ui.main.home
 
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mikirinkode.snaply.R
-import com.mikirinkode.snaply.data.Result
+import com.mikirinkode.snaply.data.model.StoryEntity
 import com.mikirinkode.snaply.data.source.LoadingStateAdapter
 import com.mikirinkode.snaply.databinding.FragmentHomeBinding
 import com.mikirinkode.snaply.ui.profile.ProfileActivity
@@ -69,12 +66,24 @@ class HomeFragment : Fragment() {
             rvStory.apply {
                 layoutManager = LinearLayoutManager(requireContext())
                 setHasFixedSize(true)
-//                adapter = storyAdapter
                 adapter = pagingAdapter.withLoadStateFooter(
                     footer = LoadingStateAdapter {
                         pagingAdapter.retry()
                     }
                 )
+                pagingAdapter.addLoadStateListener { combinedLoadStates ->
+                    val state = combinedLoadStates.mediator?.refresh.toString()
+                    if (state.contains("Error", ignoreCase = true)) {
+                        showLoading(false)
+                        val parsedErrorMessage =
+                            state.substringAfterLast("error=").substringBeforeLast(")")
+                        if (state.contains("Unable to resolve host", ignoreCase = true)) {
+                            showOnError(getString(R.string.pls_check_your_internet))
+                        } else {
+                            showOnError(parsedErrorMessage)
+                        }
+                    }
+                }
             }
 
             tvUserName.text = preferences.getStringValues(Preferences.USER_NAME)
@@ -93,9 +102,17 @@ class HomeFragment : Fragment() {
     }
 
     private fun observeStoryList() {
-        storyViewModel.stories.observe(viewLifecycleOwner) {
+        showLoading(true)
+        storyViewModel.getStories().observe(viewLifecycleOwner) {
+            if (it.equals(PagingData.empty<StoryEntity>())){
+                binding.emptyMessage.visibility = View.VISIBLE
+            } else {
+                binding.emptyMessage.visibility = View.GONE
+            }
+
             binding.swipeToRefresh.isRefreshing = false
             pagingAdapter.submitData(lifecycle, it)
+            showLoading(false)
         }
     }
 
@@ -113,7 +130,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun showError(message: String) {
+    private fun showOnError(message: String) {
         binding.apply {
             tvErrorDesc.text = message
             errorMessage.visibility = View.VISIBLE
@@ -135,11 +152,15 @@ class HomeFragment : Fragment() {
                 )
             }
 
-            swipeToRefresh.setOnRefreshListener { observeStoryList() }
+            swipeToRefresh.setOnRefreshListener {
+                pagingAdapter.refresh()
+                showLoading(true)
+            }
 
             btnRetry.setOnClickListener {
                 errorMessage.visibility = View.GONE
-                observeStoryList()
+                pagingAdapter.retry()
+                showLoading(true)
             }
         }
     }

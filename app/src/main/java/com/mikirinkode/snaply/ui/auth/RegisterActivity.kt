@@ -58,31 +58,40 @@ class RegisterActivity : AppCompatActivity() {
                         edtRegisterName.onEditorAction(EditorInfo.IME_ACTION_DONE)
 
                         // register user account
-                        viewModel.registerNewUser(name, email, password).observe(this@RegisterActivity) { result ->
-                            when (result) {
-                                is Result.Success -> {
-                                    showLoading(false)
-                                    Toast.makeText(this@RegisterActivity, result.data, Toast.LENGTH_SHORT).show()
-                                    preferences.setValues(Preferences.USER_EMAIL, email)
-
-                                    startActivity(
-                                        Intent(
+                        viewModel.registerNewUser(name, email, password)
+                            .observe(this@RegisterActivity) { result ->
+                                when (result) {
+                                    is Result.Success -> {
+                                        showLoading(false)
+                                        Toast.makeText(
                                             this@RegisterActivity,
-                                            LoginActivity::class.java
+                                            result.data,
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                        preferences.setValues(Preferences.USER_EMAIL, email)
+
+                                        startActivity(
+                                            Intent(
+                                                this@RegisterActivity,
+                                                LoginActivity::class.java
+                                            )
                                         )
-                                    )
-                                    finishAffinity()
-                                }
-                                is Result.Error -> {
-                                    showLoading(false)
-                                    showErrorMessage(result.error)
-                                    Toast.makeText(this@RegisterActivity, result.error, Toast.LENGTH_SHORT).show()
-                                }
-                                is Result.Loading -> {
-                                    showLoading(true)
+                                        finishAffinity()
+                                    }
+                                    is Result.Error -> {
+                                        showLoading(false)
+                                        showErrorMessage(result.error)
+                                        Toast.makeText(
+                                            this@RegisterActivity,
+                                            result.error,
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                    is Result.Loading -> {
+                                        showLoading(true)
+                                    }
                                 }
                             }
-                        }
                     }
                 }
             }
@@ -101,7 +110,11 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun showErrorMessage(message: String) {
         binding.apply {
-            tvErrorDesc.text = message
+            if (message.contains("Unable to resolve host")) {
+                tvErrorDesc.text = getString(R.string.pls_check_your_internet)
+            } else {
+                tvErrorDesc.text = message
+            }
             errorMessage.visibility = View.VISIBLE
         }
     }

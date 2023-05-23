@@ -44,17 +44,19 @@ class StoryRepository @Inject constructor(
             config = PagingConfig(
                 pageSize = 5
             ),
-            remoteMediator = userToken?.let { StoryRemoteMediator(it, snaplyDatabase, apiService) },
+            remoteMediator = StoryRemoteMediator("Bearer $userToken", snaplyDatabase, apiService),
             pagingSourceFactory = {
                 storyDao.getAllStory()
             }
         ).liveData
     }
 
-    fun getStoryList(token: String, needLocation: Int): LiveData<Result<List<StoryEntity>>> {
+    fun getStoryList(needLocation: Int): LiveData<Result<List<StoryEntity>>> {
+
+        val userToken = preferences.getStringValues(Preferences.USER_TOKEN)
 
         result.value = Result.Loading
-        val client = apiService.getAllStories("Bearer $token", 20, needLocation)
+        val client = apiService.getAllStories("Bearer $userToken", 20, needLocation)
         client.enqueue(object : Callback<StoryResponse> {
             override fun onResponse(call: Call<StoryResponse>, response: Response<StoryResponse>) {
                 if (response.isSuccessful) {

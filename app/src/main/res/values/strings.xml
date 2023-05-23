@@ -69,5 +69,6 @@
     <string name="cancel">Cancel</string>
     <string name="open_settings">Open Settings</string>
     <string name="no_data">No Data.</string>
-    <string name="no_data_desc">There is no Story shared with location at the moment.</string>
+    <string name="txt_empty_story_with_location">There is no Story shared with location at the moment.</string>
+    <string name="txt_empty_story">There is no Story at the moment.</string>
 </resources>

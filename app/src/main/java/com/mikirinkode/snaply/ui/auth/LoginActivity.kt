@@ -114,7 +114,11 @@ class LoginActivity : AppCompatActivity() {
 
     private fun showErrorMessage(message: String) {
         binding.apply {
-            tvErrorDesc.text = message
+            if (message.contains("Unable to resolve host")) {
+                tvErrorDesc.text = getString(R.string.pls_check_your_internet)
+            } else {
+                tvErrorDesc.text = message
+            }
             errorMessage.visibility = View.VISIBLE
         }
     }

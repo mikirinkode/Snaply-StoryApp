@@ -160,9 +160,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
     }
 
     private fun observeStoryList() {
-        val userToken = preferences.getStringValues(Preferences.USER_TOKEN)
-        if (userToken != null) {
-            storyViewModel.getStoryWithLocationList(userToken)
+
+            storyViewModel.getStoryWithLocationList()
                 .observe(viewLifecycleOwner) { result ->
                     when (result) {
                         is Result.Success -> {
@@ -189,7 +188,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
                         }
                     }
                 }
-        }
     }
 
     private fun createAllStoryMarkers(list: List<StoryEntity>) {
@@ -215,7 +213,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
             errorMessage.visibility = View.VISIBLE
             icErrorMsg.visibility = View.GONE
             tvErrorTitle.text = getString(R.string.no_data)
-            tvErrorDesc.text = getString(R.string.no_data_desc)
+            tvErrorDesc.text = getString(R.string.txt_empty_story_with_location)
         }
     }
 
