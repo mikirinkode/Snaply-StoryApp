@@ -130,7 +130,7 @@ class SelectLocationActivity : AppCompatActivity(), OnMapReadyCallback,
     }
 
     private fun navigateToLocation(latLng: LatLng, zoom: Float = 14.0f) {
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom))
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom))
     }
 
     private fun createUserLocationMarker(latLng: LatLng) {

@@ -24,6 +24,8 @@
         android:backgroundTint="?attr/background"
         app:contentInsetStart="0dp"
         app:fabCradleMargin="12dp"
+        app:fabAnchorMode="cradle"
+        app:fabAlignmentMode="center"
         app:fabCradleRoundedCornerRadius="@dimen/corner_radius"
         app:hideOnScroll="false">
 

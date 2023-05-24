@@ -20,20 +20,17 @@ class StoryViewModel @Inject constructor(private val storyRepository: StoryRepos
     ViewModel() {
 
     private val stories: LiveData<PagingData<StoryEntity>>
-//    = MutableLiveData<PagingData<StoryEntity>>()
             = storyRepository.getPagingStory().cachedIn(viewModelScope)
 
-    val emptyData = MutableLiveData<PagingData<StoryEntity>>()
-    fun getEmptyData(): LiveData<PagingData<StoryEntity>> {
-        emptyData.value = PagingData.empty()
-        return emptyData
-    }
+    private val storiesWithLocation = storyRepository.getStoryList(1)
 
     fun getStories(): LiveData<PagingData<StoryEntity>> {
         return stories
     }
 
-    fun getStoryWithLocationList() = storyRepository.getStoryList(1)
+    fun getStoryWithLocationList(): LiveData<Result<List<StoryEntity>>> {
+        return storiesWithLocation
+    }
 
     fun addNewStory(
         token: String,
