@@ -63,9 +63,9 @@ class LoginActivity : AppCompatActivity() {
 
                 when {
                     TextUtils.isEmpty(email) -> edtLoginEmail.error =
-                        getString(R.string.empty_email)
+                        getString(R.string.txt_edt_error_empty_email)
                     TextUtils.isEmpty(password) -> edtLoginPassword.error =
-                        getString(R.string.empty_password)
+                        getString(R.string.txt_edt_error_empty_password)
                     else -> {
                         // close keyboard
                         edtLoginEmail.onEditorAction(EditorInfo.IME_ACTION_DONE)
@@ -115,7 +115,7 @@ class LoginActivity : AppCompatActivity() {
     private fun showErrorMessage(message: String) {
         binding.apply {
             if (message.contains("Unable to resolve host")) {
-                tvErrorDesc.text = getString(R.string.pls_check_your_internet)
+                tvErrorDesc.text = getString(R.string.txt_no_internet_desc)
             } else {
                 tvErrorDesc.text = message
             }

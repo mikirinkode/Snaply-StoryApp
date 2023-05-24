@@ -10,7 +10,6 @@ import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatDelegate
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -210,10 +209,10 @@ class SelectLocationActivity : AppCompatActivity(), OnMapReadyCallback,
 
     private fun showEnableLocationServiceDialog() {
         val builder = MaterialAlertDialogBuilder(this)
-        builder.setTitle(getString(R.string.enable_location))
-        builder.setMessage(getString(R.string.enable_location_service_desc))
+        builder.setTitle(getString(R.string.txt_dialog_title_enable_location))
+        builder.setMessage(getString(R.string.txt_dialog_desc_enable_location_service))
             .setCancelable(false)
-            .setPositiveButton(getString(R.string.open_settings)) { _, _ ->
+            .setPositiveButton(getString(R.string.txt_dialog_btn_open_settings)) { _, _ ->
                 // Open settings screen to enable location services
                 val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                 startActivity(intent)

@@ -70,7 +70,6 @@ class UserRepository @Inject constructor(
                     val loginResult = response.body()?.loginResult
                     if (loginResult != null) {
 
-                        // TODO: CHECK DO WE NEED APP EXECUTORS HERE?
                         result.value = Result.Success(
                             UserEntity(
                                 loginResult.userId,

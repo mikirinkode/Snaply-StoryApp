@@ -1,37 +1,25 @@
 package com.mikirinkode.snaply.ui.main.maps
 
-import android.animation.ValueAnimator
-import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.LinearInterpolator
 import android.widget.Toast
-import androidx.core.app.ActivityOptionsCompat
-import androidx.core.util.Pair
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.*
-import com.google.android.material.carousel.CarouselLayoutManager
-
 import com.mikirinkode.snaply.R
 import com.mikirinkode.snaply.data.Result
 import com.mikirinkode.snaply.data.model.StoryEntity
 import com.mikirinkode.snaply.databinding.FragmentMapsBinding
-import com.mikirinkode.snaply.ui.detail.DetailActivity
-import com.mikirinkode.snaply.utils.LinearLatLngInterpolator
 import com.mikirinkode.snaply.utils.Preferences
 import com.mikirinkode.snaply.viewmodel.StoryViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -54,8 +42,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
     private val storyViewModel: StoryViewModel by viewModels()
     private var storyList: ArrayList<StoryEntity> = arrayListOf()
 
-    private val carouselAdapter: StoryAdapter by lazy {
-        StoryAdapter(requireActivity())
+    private val carouselAdapter: StoryMapsAdapter by lazy {
+        StoryMapsAdapter(requireActivity())
     }
 
     override fun onCreateView(
@@ -163,9 +151,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
 
     override fun onMapClick(p0: LatLng) {
         binding.apply {
-            if (cardStoryImage.visibility == View.VISIBLE) {
-                cardStoryImage.visibility = View.GONE
-            }
             if (errorMessage.visibility == View.VISIBLE) {
                 errorMessage.visibility = View.GONE
             }
@@ -173,33 +158,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
     }
 
     override fun onMarkerClick(marker: Marker): Boolean {
-        if (storyList.isNotEmpty()) {
-
-            val selectedStory = storyList.find { it.id == marker.title }
-
-            if (selectedStory != null) {
-                binding.cardStoryImage.visibility = View.VISIBLE
-                Glide.with(requireContext())
-                    .load(selectedStory.photoUrl)
-                    .into(binding.ivStoryImage)
-
-
-                binding.cardStoryImage.setOnClickListener {
-                    val intent = Intent(requireContext(), DetailActivity::class.java)
-                    intent.putExtra(DetailActivity.EXTRA_STORY, selectedStory)
-
-                    val optionsCompat: ActivityOptionsCompat =
-                        ActivityOptionsCompat.makeSceneTransitionAnimation(
-                            requireActivity(),
-                            Pair(binding.ivStoryImage, getString(R.string.story_image)),
-                        )
-                    startActivity(intent, optionsCompat.toBundle())
-                }
-            } else {
-                binding.cardStoryImage.visibility = View.GONE
-            }
-        }
-
+        navigateToLocation(marker.position)
         return true
     }
 
@@ -257,7 +216,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
         binding.apply {
             errorMessage.visibility = View.VISIBLE
             icErrorMsg.visibility = View.GONE
-            tvErrorTitle.text = getString(R.string.no_data)
+            tvErrorTitle.text = getString(R.string.txt_no_data)
             tvErrorDesc.text = getString(R.string.txt_empty_story_with_location)
         }
     }

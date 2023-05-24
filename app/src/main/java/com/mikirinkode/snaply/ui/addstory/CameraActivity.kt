@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
@@ -71,7 +70,7 @@ class CameraActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 Toast.makeText(
                     this@CameraActivity,
-                    getString(R.string.fail_open_cam),
+                    getString(R.string.txt_failed_open_cam),
                     Toast.LENGTH_SHORT
                 ).show()
                 }
@@ -93,7 +92,7 @@ class CameraActivity : AppCompatActivity() {
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     Toast.makeText(
                         this@CameraActivity,
-                        getString(R.string.success_capt_img),
+                        getString(R.string.txt_success_capture_image),
                         Toast.LENGTH_SHORT
                     ).show()
 
@@ -111,7 +110,7 @@ class CameraActivity : AppCompatActivity() {
                 override fun onError(exc: ImageCaptureException) {
                     Toast.makeText(
                         this@CameraActivity,
-                        getString(R.string.fail_to_capt_img),
+                        getString(R.string.txt_failed_capture_image),
                         Toast.LENGTH_SHORT
                     ).show()
                 }

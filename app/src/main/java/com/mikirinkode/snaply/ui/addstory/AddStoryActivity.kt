@@ -25,11 +25,9 @@ import com.mikirinkode.snaply.ui.main.MainActivity
 import com.mikirinkode.snaply.viewmodel.StoryViewModel
 import com.mikirinkode.snaply.utils.*
 import dagger.hilt.android.AndroidEntryPoint
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 import javax.inject.Inject
 
@@ -116,10 +114,10 @@ class AddStoryActivity : AppCompatActivity() {
             )
         } else {
             val pictureDialog = AlertDialog.Builder(this)
-            pictureDialog.setTitle(getString(R.string.choose_action))
+            pictureDialog.setTitle(getString(R.string.txt_dialog_choosing_action))
             val pictureDialogItem = arrayOf(
-                getString(R.string.from_gallery),
-                getString(R.string.using_camera)
+                getString(R.string.txt_dialog_item_gallery),
+                getString(R.string.txt_dialog_item_camera)
             )
             pictureDialog.setItems(pictureDialogItem) { _, which ->
                 when (which) {
@@ -135,7 +133,7 @@ class AddStoryActivity : AppCompatActivity() {
         val intent = Intent()
         intent.action = ACTION_GET_CONTENT
         intent.type = "image/*"
-        val chooser = Intent.createChooser(intent, getString(R.string.choose_picture))
+        val chooser = Intent.createChooser(intent, getString(R.string.txt_intent_title_choose_picture))
         launcherIntentGallery.launch(chooser)
     }
 
@@ -185,7 +183,7 @@ class AddStoryActivity : AppCompatActivity() {
 
             val inputDesc = edtStoryCaption.text.toString().trim()
             if (inputDesc.isEmpty()) {
-                edtStoryCaption.error = getString(R.string.empty_desc)
+                edtStoryCaption.error = getString(R.string.txt_edt_error_empty_caption)
             }
 
             if (inputDesc.isNotEmpty()) {
@@ -245,7 +243,7 @@ class AddStoryActivity : AppCompatActivity() {
                 } else {
                     Toast.makeText(
                         this@AddStoryActivity,
-                        getString(R.string.select_img),
+                        getString(R.string.txt_please_select_image),
                         Toast.LENGTH_SHORT
                     )
                         .show()
@@ -266,7 +264,7 @@ class AddStoryActivity : AppCompatActivity() {
             if (!allPermissionsGranted()) {
                 Toast.makeText(
                     this,
-                    getString(R.string.permission_not_granted),
+                    getString(R.string.txt_error_permission_not_granted),
                     Toast.LENGTH_SHORT
                 ).show()
                 finish()

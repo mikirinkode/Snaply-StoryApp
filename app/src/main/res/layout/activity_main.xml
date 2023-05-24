@@ -49,7 +49,7 @@
         android:id="@+id/fab_add_story"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/btn_add_photo"
+        android:contentDescription="@string/txt_btn_add_photo"
         android:elevation="2dp"
         android:src="@drawable/ic_add_photo"
         app:backgroundTint="?android:attr/colorPrimary"

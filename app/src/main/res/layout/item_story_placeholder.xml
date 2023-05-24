@@ -17,7 +17,7 @@
             android:id="@+id/iv_story_photo"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:contentDescription="@string/story_image_placeholder"
+            android:contentDescription="@string/content_desc_story_image_placeholder"
             android:scaleType="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

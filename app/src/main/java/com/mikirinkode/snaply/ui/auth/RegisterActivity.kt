@@ -46,13 +46,13 @@ class RegisterActivity : AppCompatActivity() {
                 val passwordConf = edtRegisterPasswordConf.text.toString().trim()
                 when {
                     TextUtils.isEmpty(name) -> edtRegisterName.error =
-                        getString(R.string.empty_name)
+                        getString(R.string.txt_edt_error_empty_name)
                     TextUtils.isEmpty(email) -> edtRegisterEmail.error =
-                        getString(R.string.empty_email)
+                        getString(R.string.txt_edt_error_empty_email)
                     TextUtils.isEmpty(password) -> edtRegisterPassword.error =
-                        getString(R.string.empty_password)
+                        getString(R.string.txt_edt_error_empty_password)
                     passwordConf != password -> edtRegisterPasswordConf.error =
-                        getString(R.string.pass_not_match)
+                        getString(R.string.txt_edt_error_password_not_match)
                     else -> {
                         // close keyboard
                         edtRegisterName.onEditorAction(EditorInfo.IME_ACTION_DONE)
@@ -111,7 +111,7 @@ class RegisterActivity : AppCompatActivity() {
     private fun showErrorMessage(message: String) {
         binding.apply {
             if (message.contains("Unable to resolve host")) {
-                tvErrorDesc.text = getString(R.string.pls_check_your_internet)
+                tvErrorDesc.text = getString(R.string.txt_no_internet_desc)
             } else {
                 tvErrorDesc.text = message
             }

@@ -39,7 +39,7 @@ class HomePagingAdapter(private val activity: Activity): PagingDataAdapter<Story
                 val optionsCompat: ActivityOptionsCompat =
                     ActivityOptionsCompat.makeSceneTransitionAnimation(
                         activity,
-                        Pair(binding.ivStoryPhoto, itemView.context.getString(R.string.story_image)),
+                        Pair(binding.ivStoryPhoto, itemView.context.getString(R.string.content_desc_story_image)),
                     )
                 itemView.context.startActivity(intent, optionsCompat.toBundle())
             }

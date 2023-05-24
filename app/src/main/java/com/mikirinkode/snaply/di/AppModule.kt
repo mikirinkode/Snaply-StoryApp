@@ -15,6 +15,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import net.sqlcipher.database.SQLiteDatabase
+import net.sqlcipher.database.SupportFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -61,7 +63,11 @@ class AppModule {
     @Provides
     @Singleton
     fun provideDatabase(@ApplicationContext app: Context): SnaplyDatabase {
+        val passphrase: ByteArray = SQLiteDatabase.getBytes(Constants.PASSPHRASE.toCharArray())
+        val factory = SupportFactory(passphrase)
+
         return Room.databaseBuilder(app, SnaplyDatabase::class.java, Constants.DB_NAME)
+            .openHelperFactory(factory)
             .fallbackToDestructiveMigration()
             .allowMainThreadQueries()
             .build()

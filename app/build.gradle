@@ -18,6 +18,14 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+        buildConfigField("String", "BASE_URL", "\"${properties.getProperty('BASE_URL')}\"")
+        buildConfigField("String", "DB_NAME", "\"${properties.getProperty('DB_NAME')}\"")
+        buildConfigField("String", "PASSPHRASE", "\"${properties.getProperty('PASSPHRASE')}\"")
     }
 
     buildTypes {
@@ -90,6 +98,9 @@ dependencies {
     kapt 'androidx.room:room-compiler:2.4.2'
 
     implementation 'androidx.room:room-paging:2.4.2'
+    // SQLCipher
+    implementation "net.zetetic:android-database-sqlcipher:4.5.0"
+    implementation "androidx.sqlite:sqlite-ktx:2.3.1"
 
     // coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutinesVersion"

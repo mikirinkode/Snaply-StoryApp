@@ -63,7 +63,6 @@ class StoryRepository @Inject constructor(
                     if (!response.body()?.listStory.isNullOrEmpty()) {
                         val list = ArrayList<StoryEntity>()
 
-                        // TODO: CHECK WHY NEED APP EXECUTORS
                         appExecutors.diskIO.execute {
                             response.body()?.listStory?.forEach {
                                 val story = StoryEntity(

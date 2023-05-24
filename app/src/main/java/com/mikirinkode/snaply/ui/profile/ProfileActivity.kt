@@ -50,10 +50,10 @@ class ProfileActivity : AppCompatActivity() {
 
             btnLogout.setOnClickListener {
                 val builder = MaterialAlertDialogBuilder(this@ProfileActivity)
-                builder.setTitle(getString(R.string.logout))
-                builder.setMessage(getString(R.string.are_you_sure_want_to_logout))
+                builder.setTitle(getString(R.string.txt_btn_logout))
+                builder.setMessage(getString(R.string.txt_dialog_desc_logout))
                     .setCancelable(false)
-                    .setPositiveButton(getString(R.string.sure)) { _, _ ->
+                    .setPositiveButton(getString(R.string.txt_dialog_sure)) { _, _ ->
                         // clear the user data
                         preferences.setValues(Preferences.USER_ID, "")
                         preferences.setValues(Preferences.USER_NAME, "")
@@ -62,7 +62,7 @@ class ProfileActivity : AppCompatActivity() {
                         startActivity(Intent(this@ProfileActivity, LoginActivity::class.java))
                         finishAffinity()
                     }
-                    .setNegativeButton(getString(R.string.no)) { dialogInterface, _ ->
+                    .setNegativeButton(getString(R.string.txt_dialog_no)) { dialogInterface, _ ->
                         dialogInterface.cancel()
                     }
 

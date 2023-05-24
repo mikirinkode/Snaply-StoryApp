@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -42,13 +41,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         val builder = MaterialAlertDialogBuilder(this)
-        builder.setTitle(getString(R.string.exit_app))
-        builder.setMessage(getString(R.string.are_you_sure_want_to_exit))
+        builder.setTitle(getString(R.string.txt_dialog_exit_app))
+        builder.setMessage(getString(R.string.txt_dialog_desc_exit_app))
             .setCancelable(false)
-            .setPositiveButton(getString(R.string.sure)) { _, _ ->
+            .setPositiveButton(getString(R.string.txt_dialog_sure)) { _, _ ->
                 finish()
             }
-            .setNegativeButton(getString(R.string.no)) { dialogInterface, _ ->
+            .setNegativeButton(getString(R.string.txt_dialog_no)) { dialogInterface, _ ->
                 dialogInterface.cancel()
             }
 

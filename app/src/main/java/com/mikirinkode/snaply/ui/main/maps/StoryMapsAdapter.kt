@@ -12,12 +12,11 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.mikirinkode.snaply.R
 import com.mikirinkode.snaply.data.model.StoryEntity
-import com.mikirinkode.snaply.databinding.ItemStoryBinding
 import com.mikirinkode.snaply.databinding.ItemStoryMapsBinding
 import com.mikirinkode.snaply.ui.detail.DetailActivity
 import com.mikirinkode.snaply.utils.StoryDiffUtil
 
-class StoryAdapter(private val activity: Activity) : RecyclerView.Adapter<StoryAdapter.StoryViewHolder>() {
+class StoryMapsAdapter(private val activity: Activity) : RecyclerView.Adapter<StoryMapsAdapter.StoryViewHolder>() {
 
     private var storyList = ArrayList<StoryEntity>()
 
@@ -42,7 +41,7 @@ class StoryAdapter(private val activity: Activity) : RecyclerView.Adapter<StoryA
                 val optionsCompat: ActivityOptionsCompat =
                     ActivityOptionsCompat.makeSceneTransitionAnimation(
                         activity,
-                        Pair(binding.ivStoryPhoto, itemView.context.getString(R.string.story_image)),
+                        Pair(binding.ivStoryPhoto, itemView.context.getString(R.string.content_desc_story_image)),
                     )
                 itemView.context.startActivity(intent, optionsCompat.toBundle())
             }

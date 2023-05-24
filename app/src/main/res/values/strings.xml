@@ -1,74 +1,88 @@
 <resources>
     <string name="app_name">Snaply</string>
-    <string name="choose_action">Choose Action:</string>
-    <string name="from_gallery">Take Picture from Gallery</string>
-    <string name="using_camera">Take using Camera</string>
-    <string name="choose_picture">Choose a Picture</string>
-    <string name="empty_desc">Caption is empty</string>
-    <string name="select_img">Please select an image.</string>
-    <string name="permission_not_granted">Permission not granted.</string>
-    <string name="fail_to_capt_img">Failed to Capture Image.</string>
-    <string name="success_capt_img">Successfully Capture Image.</string>
-    <string name="fail_open_cam">Failed to open Camera.</string>
-    <string name="empty_email">email cannot be empty</string>
-    <string name="empty_password">Password cannot be empty</string>
-    <string name="pass_not_match">Password didn\'t match</string>
-    <string name="empty_name">Name cannot be empty</string>
-    <string name="story_image">Story Image</string>
-    <string name="btn_add_photo">Add Story Photo Button</string>
-    <string name="caption">Caption</string>
-    <string name="btn_upload">Upload Button</string>
-    <string name="activity_add_story">Add Story</string>
-    <string name="btn_back">Back Button</string>
-    <string name="btn_capture">Capture Button</string>
-    <string name="btn_switch_camera">Switch Camera Button</string>
-    <string name="moment_captured_by">Moment captured by</string>
-    <string name="welcome_back_greeting">Hey Welcome back,\nLet\'s Share a story.</string>
-    <string name="email">Email</string>
-    <string name="password">Password</string>
-    <string name="login">LOGIN</string>
-    <string name="dont_have_acc_yet">Don\'t have an account yet?</string>
-    <string name="register_now">Register Now</string>
-    <string name="loading">Loading</string>
-    <string name="no_internet">No Internet</string>
-    <string name="pls_check_your_internet">Please check your internet connection.</string>
-    <string name="bad_signal_icon">Bad Signal Icon</string>
-    <string name="activity_profile">Profile</string>
-    <string name="settings">Settings</string>
-    <string name="dark_mode">Dark Mode</string>
+
+    <!--  ADD Story  -->
+    <string name="txt_activity_add_story">Add Story</string>
+    <string name="txt_dialog_choosing_action">Choose Action:</string>
+    <string name="txt_dialog_item_gallery">Take Picture from Gallery</string>
+    <string name="txt_dialog_item_camera">Take using Camera</string>
+    <string name="txt_intent_title_choose_picture">Choose a Picture</string>
+    <string name="txt_edt_error_empty_caption">Caption is empty</string>
+    <string name="txt_please_select_image">Please select an image.</string>
+    <string name="txt_error_permission_not_granted">Permission not granted.</string>
+    <string name="txt_btn_add_photo">Add Story Photo Button</string>
+    <string name="txt_btn_upload">Upload Button</string>
+    <string name="txt_hint_caption">Caption</string>
+
+    <!--  CAMERA ACTIVITY  -->
+    <string name="txt_failed_capture_image">Failed to Capture Image.</string>
+    <string name="txt_success_capture_image">Successfully Capture Image.</string>
+    <string name="txt_failed_open_cam">Failed to open Camera.</string>
+
+    <!--  LOGIN & REGISTER  -->
+    <string name="txt_edt_error_empty_email">email cannot be empty</string>
+    <string name="txt_edt_error_empty_password">Password cannot be empty</string>
+    <string name="txt_edt_error_password_not_match">Password didn\'t match</string>
+    <string name="txt_edt_error_empty_name">Name cannot be empty</string>
+    <string name="txt_login_greeting">Hey Welcome back,\nLet\'s Share a story.</string>
+    <string name="txt_hint_email">Email</string>
+    <string name="txt_hint_password">Password</string>
+    <string name="txt_btn_login">LOGIN</string>
+    <string name="txt_dont_have_acc_yet">Don\'t have an account yet?</string>
+    <string name="txt_btn_register_now">Register Now</string>
+    <string name="txt_register_greeting">Create your new account\nand you\'ll be ready to share your story.</string>
+    <string name="txt_hint_full_name">Full Name</string>
+    <string name="txt_hint_password_confirmation">Password Confirmation</string>
+    <string name="txt_btn_register">REGISTER</string>
+    <string name="txt_already_have_acc">Already have an account?</string>
+    <string name="txt_btn_login_here">Login here</string>
+
+    <!--  DETAIL STORY  -->
+    <string name="txt_moment_captured_by">Moment captured by</string>
+
+    <!--  PROFILE  -->
+    <string name="txt_activity_profile">Profile</string>
+    <string name="txt_settings">Settings</string>
+    <string name="txt_dark_mode">Dark Mode</string>
     <string name="dark_mode_icon">Dark Mode Icon</string>
     <string name="language_icon">Language Icon</string>
     <string name="language">Language</string>
-    <string name="change">change</string>
-    <string name="sign_up_desc">Create your new account\nand you\'ll be ready to share your story.</string>
-    <string name="full_name">Full Name</string>
-    <string name="password_confirmation">Password Confirmation</string>
-    <string name="register">REGISTER</string>
-    <string name="already_have_acc">Already have an account?</string>
-    <string name="login_here">Login here</string>
-    <string name="story_image_placeholder">Story Image Placeholder</string>
-    <string name="logout">LOGOUT</string>
-    <string name="user_photo_profile">User Photo Profile</string>
-    <string name="user_name">User Name</string>
-    <string name="an_error_occurred">An Error Occurred.</string>
-    <string name="try_again">Try Again</string>
-    <string name="exit_app">Exit App</string>
-    <string name="enable_location_service">Enable Location Service</string>
-    <string name="are_you_sure_want_to_exit">Are you sure want to exit?</string>
-    <string name="enable_location_service_desc">Snaply needs you to enable the location service to be able to determine your location.</string>
-    <string name="sure">Yes</string>
-    <string name="no">No</string>
-    <string name="are_you_sure_want_to_logout">Are you sure want to Logout?</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="upload">UPLOAD</string>
+    <string name="txt_btn_change_language">change</string>
+    <string name="txt_btn_logout">LOGOUT</string>
+    <string name="txt_transition_user_photo_profile">User Photo Profile</string>
+    <string name="txt_user_name">User Name</string>
+
+    <!--  OTHER  -->
+    <string name="content_desc_story_image">Story Image</string>
+    <string name="content_desc_btn_capture">Capture Button</string>
+    <string name="content_desc_btn_switch_camera">Switch Camera Button</string>
+    <string name="content_desc_bad_signal_icon">Bad Signal Icon</string>
+    <string name="content_desc_story_image_placeholder">Story Image Placeholder</string>
+    <string name="txt_btn_back">Back Button</string>
+    <string name="txt_btn_try_again">Try Again</string>
+    <string name="txt_loading">Loading</string>
+    <string name="txt_no_internet">No Internet</string>
+    <string name="txt_no_internet_desc">Please check your internet connection.</string>
+    <string name="txt_an_error_occurred">An Error Occurred.</string>
+    <string name="txt_dialog_sure">Yes</string>
+    <string name="txt_dialog_no">No</string>
+
+    <!-- MAIN ACTIVITY   -->
+    <string name="txt_dialog_exit_app">Exit App</string>
+    <string name="txt_dialog_desc_exit_app">Are you sure want to exit?</string>
+    <string name="txt_dialog_desc_logout">Are you sure want to Logout?</string>
+
+    <!--  SELECT_LOCATION  -->
+    <string name="txt_dialog_title_enable_location">Enable Location?</string>
+    <string name="txt_dialog_desc_enable_location_service">Snaply needs you to enable the location service to be able to determine your location.</string>
+    <string name="txt_dialog_btn_open_settings">Open Settings</string>
     <string name="location">Location</string>
-    <string name="enable_location">Enable Location?</string>
+    <string name="content_desc_btn_go_to_user_location">Go to User Location</string>
     <string name="retry">Retry</string>
-    <string name="btn_go_to_user_location">Go to User Location</string>
     <string name="cancel">Cancel</string>
-    <string name="open_settings">Open Settings</string>
-    <string name="no_data">No Data.</string>
+
+<!--  MAPS FRAGMENT  -->
+    <string name="txt_no_data">No Data.</string>
     <string name="txt_empty_story_with_location">There is no Story shared with location at the moment.</string>
     <string name="txt_empty_story">There is no Story at the moment.</string>
 </resources>

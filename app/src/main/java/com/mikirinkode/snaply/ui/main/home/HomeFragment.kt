@@ -2,7 +2,6 @@ package com.mikirinkode.snaply.ui.main.home
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,7 +33,6 @@ class HomeFragment : Fragment() {
 
     private val storyViewModel: StoryViewModel by viewModels()
 
-    //    private lateinit var storyAdapter: StoryAdapter
     private lateinit var pagingAdapter: HomePagingAdapter
 
     override fun onCreateView(
@@ -78,7 +76,7 @@ class HomeFragment : Fragment() {
                         val parsedErrorMessage =
                             state.substringAfterLast("error=").substringBeforeLast(")")
                         if (state.contains("Unable to resolve host", ignoreCase = true)) {
-                            showOnError(getString(R.string.pls_check_your_internet))
+                            showOnError(getString(R.string.txt_no_internet_desc))
                         } else {
                             showOnError(parsedErrorMessage)
                         }
@@ -143,8 +141,8 @@ class HomeFragment : Fragment() {
                 val optionsCompat: ActivityOptionsCompat =
                     ActivityOptionsCompat.makeSceneTransitionAnimation(
                         requireActivity(),
-                        Pair(ivUserPhoto, getString(R.string.user_photo_profile)),
-                        Pair(tvUserName, getString(R.string.user_name))
+                        Pair(ivUserPhoto, getString(R.string.txt_transition_user_photo_profile)),
+                        Pair(tvUserName, getString(R.string.txt_user_name))
                     )
                 startActivity(
                     Intent(requireContext(), ProfileActivity::class.java),
