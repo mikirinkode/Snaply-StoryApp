@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="24dp"
         android:enabled="false"
-        android:text="Select Location"
+        android:text="@string/txt_btn_select_location"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

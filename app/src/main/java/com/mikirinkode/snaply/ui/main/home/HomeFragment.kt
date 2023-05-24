@@ -38,7 +38,7 @@ class HomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for requireContext() fragment
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
@@ -120,11 +120,11 @@ class HomeFragment : Fragment() {
             if (state) {
                 loading.visibility = View.VISIBLE
                 errorMessage.visibility = View.GONE
+                shinyLoading.visibility = View.VISIBLE
             } else {
                 loading.visibility = View.GONE
+                shinyLoading.visibility = View.GONE
             }
-            if (state) shinyLoading.visibility = View.VISIBLE else shinyLoading.visibility =
-                View.GONE
         }
     }
 

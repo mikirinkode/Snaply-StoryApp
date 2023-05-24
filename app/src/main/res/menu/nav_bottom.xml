@@ -4,7 +4,7 @@
     <item
         android:id="@+id/nav_home"
         android:icon="@drawable/ic_home"
-        android:title="Home"/>
+        android:title="@string/txt_bottom_nav_title_home"/>
 
 
     <item
@@ -14,5 +14,5 @@
     <item
         android:id="@+id/nav_maps"
         android:icon="@drawable/ic_location"
-        android:title="Maps"/>
+        android:title="@string/txt_bottom_nav_title_maps"/>
 </menu>

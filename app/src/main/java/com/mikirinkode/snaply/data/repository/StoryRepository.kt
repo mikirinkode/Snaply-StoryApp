@@ -88,7 +88,7 @@ class StoryRepository @Inject constructor(
                         )
                         Log.e(TAG, "response.errorBody()::" + responseBody.message)
 
-                        result.value = Result.Error(responseBody.message.toString())
+                        result.value = Result.Error(responseBody.message)
                     } catch (e: Exception) {
                         Log.e(TAG, e.message.toString())
                     }
@@ -141,7 +141,7 @@ class StoryRepository @Inject constructor(
                             )
                             Log.e(TAG, "response.errorBody()::" + responseBody.message)
 
-                            result.value = Result.Error(responseBody.message.toString())
+                            result.value = Result.Error(responseBody.message)
                         } catch (e: Exception) {
                             Log.e(TAG, e.message.toString())
                         }

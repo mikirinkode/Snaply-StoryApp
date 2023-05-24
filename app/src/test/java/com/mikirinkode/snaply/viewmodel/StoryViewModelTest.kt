@@ -50,7 +50,7 @@ class StoryViewModelTest {
         Mockito.`when`(storyRepository.getPagingStory()).thenReturn(expectedStory)
 
         val storyViewModel = StoryViewModel(storyRepository)
-        val actualStory: PagingData<StoryEntity> = storyViewModel.stories.getOrAwaitValue()
+        val actualStory: PagingData<StoryEntity> = storyViewModel.getStories().getOrAwaitValue()
 
         val differ = AsyncPagingDataDiffer(
             diffCallback = HomePagingAdapter.DIFF_CALLBACK,
@@ -59,9 +59,9 @@ class StoryViewModelTest {
         )
         differ.submitData(actualStory)
 
-        Assert.assertNotNull(differ.snapshot())
-        Assert.assertEquals(dummyStories.size, differ.snapshot().size)
-        Assert.assertEquals(dummyStories[0], differ.snapshot()[0])
+        assertNotNull(differ.snapshot())
+        assertEquals(dummyStories.size, differ.snapshot().size)
+        assertEquals(dummyStories[0], differ.snapshot()[0])
     }
 
     @Test
@@ -71,14 +71,14 @@ class StoryViewModelTest {
         expectedQuote.value = data
         Mockito.`when`(storyRepository.getPagingStory()).thenReturn(expectedQuote)
         val viewModel = StoryViewModel(storyRepository)
-        val actualQuote: PagingData<StoryEntity> = viewModel.stories.getOrAwaitValue()
+        val actualQuote: PagingData<StoryEntity> = viewModel.getStories().getOrAwaitValue()
         val differ = AsyncPagingDataDiffer(
             diffCallback = HomePagingAdapter.DIFF_CALLBACK,
             updateCallback = noopListUpdateCallback,
             workerDispatcher = Dispatchers.Main,
         )
         differ.submitData(actualQuote)
-        Assert.assertEquals(0, differ.snapshot().size)
+        assertEquals(0, differ.snapshot().size)
     }
 }
 
@@ -97,7 +97,7 @@ class StoryPagingSource : PagingSource<Int, LiveData<List<StoryEntity>>>() {
         }
     }
 
-    override fun getRefreshKey(state: PagingState<Int, LiveData<List<StoryEntity>>>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, LiveData<List<StoryEntity>>>): Int {
         return 0
     }
 

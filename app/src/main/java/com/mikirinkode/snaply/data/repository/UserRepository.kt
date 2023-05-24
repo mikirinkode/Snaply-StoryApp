@@ -18,8 +18,6 @@ import javax.inject.Inject
 
 class UserRepository @Inject constructor(
     private val apiService: ApiService,
-    private val storyDao: StoryDao,
-    private val appExecutors: AppExecutors,
     private val preferences: Preferences
 ) {
 
@@ -91,7 +89,7 @@ class UserRepository @Inject constructor(
                         Log.e(TAG, "response.errorBody()::" + responseBody.error.toString())
                         Log.e(TAG, "response.errorBody()::" + responseBody.message)
 
-                        result.value = Result.Error(responseBody.message.toString())
+                        result.value = Result.Error(responseBody.message)
                     } catch (e: Exception) {
                         Log.e(TAG, e.message.toString())
                     }

@@ -181,15 +181,14 @@ class AddStoryActivity : AppCompatActivity() {
         binding.apply {
             val token = preferences.getStringValues(Preferences.USER_TOKEN)
 
-            val inputDesc = edtStoryCaption.text.toString().trim()
-            if (inputDesc.isEmpty()) {
+            val description = edtStoryCaption.text.toString().trim()
+            if (description.isEmpty()) {
                 edtStoryCaption.error = getString(R.string.txt_edt_error_empty_caption)
             }
 
-            if (inputDesc.isNotEmpty()) {
+            if (description.isNotEmpty()) {
                 if (getFile != null) {
                     val file = reduceFileImage(getFile as File)
-                    val description = inputDesc
                     val requestImageFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
                     val imageMultipart: MultipartBody.Part = MultipartBody.Part.createFormData(
                         "photo",
@@ -214,7 +213,7 @@ class AddStoryActivity : AppCompatActivity() {
                                     is Result.Success -> {
                                         Toast.makeText(
                                             this@AddStoryActivity,
-                                            result.data.toString(),
+                                            result.data,
                                             Toast.LENGTH_SHORT
                                         ).show()
                                         loadingIndicator.visibility = View.GONE
@@ -229,7 +228,7 @@ class AddStoryActivity : AppCompatActivity() {
                                     is Result.Error -> {
                                         Toast.makeText(
                                             this@AddStoryActivity,
-                                            result.error.toString(),
+                                            result.error,
                                             Toast.LENGTH_SHORT
                                         ).show()
                                         loadingIndicator.visibility = View.GONE

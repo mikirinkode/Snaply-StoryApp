@@ -93,7 +93,7 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideUserRepository(apiService: ApiService, dao: StoryDao, preferences: Preferences, appExecutors: AppExecutors): UserRepository {
-        return UserRepository(apiService, dao, appExecutors, preferences)
+    fun provideUserRepository(apiService: ApiService, preferences: Preferences): UserRepository {
+        return UserRepository(apiService, preferences)
     }
 }
