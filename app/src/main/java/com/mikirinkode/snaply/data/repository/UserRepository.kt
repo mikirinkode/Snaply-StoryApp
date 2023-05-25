@@ -4,12 +4,10 @@ import android.util.Log
 import androidx.lifecycle.MediatorLiveData
 import com.google.gson.Gson
 import com.mikirinkode.snaply.data.Result
-import com.mikirinkode.snaply.data.source.local.StoryDao
 import com.mikirinkode.snaply.data.model.UserEntity
 import com.mikirinkode.snaply.data.source.remote.ApiService
 import com.mikirinkode.snaply.data.source.remote.response.LoginResponse
 import com.mikirinkode.snaply.data.source.remote.response.RegisterResponse
-import com.mikirinkode.snaply.utils.AppExecutors
 import com.mikirinkode.snaply.utils.Preferences
 import retrofit2.Call
 import retrofit2.Callback

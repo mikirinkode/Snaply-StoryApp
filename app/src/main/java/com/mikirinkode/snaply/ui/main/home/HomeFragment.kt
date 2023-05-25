@@ -163,10 +163,6 @@ class HomeFragment : Fragment() {
         }
     }
 
-    companion object {
-        private const val TAG = "HomeFragment"
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         _binding = null

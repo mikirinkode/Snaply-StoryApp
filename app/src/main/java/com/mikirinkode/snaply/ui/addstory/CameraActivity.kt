@@ -136,7 +136,4 @@ class CameraActivity : AppCompatActivity() {
         supportActionBar?.hide()
     }
 
-    companion object {
-        private const val TAG = "CameraActivity"
-    }
 }

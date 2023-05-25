@@ -1,7 +1,6 @@
 package com.mikirinkode.snaply.utils
 
 
-// TODO: check kapan dipake
 open class Event<out T>(private val content: T) {
 
     private var hasBeenHandled = false

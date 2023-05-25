@@ -241,8 +241,4 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
             }
         }
     }
-
-    companion object {
-        private const val TAG = "MapsFragment"
-    }
 }
