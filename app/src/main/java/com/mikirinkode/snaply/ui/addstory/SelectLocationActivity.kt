@@ -1,7 +1,9 @@
 package com.mikirinkode.snaply.ui.addstory
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +12,7 @@ import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -175,6 +178,16 @@ class SelectLocationActivity : AppCompatActivity(), OnMapReadyCallback,
 
                     // check the location service
                     if (isLocationServiceEnabled(this@SelectLocationActivity)) {
+                        if (ActivityCompat.checkSelfPermission(
+                                this@SelectLocationActivity,
+                                Manifest.permission.ACCESS_FINE_LOCATION
+                            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                                this@SelectLocationActivity,
+                                Manifest.permission.ACCESS_COARSE_LOCATION
+                            ) != PackageManager.PERMISSION_GRANTED
+                        ) {
+                            PermissionManager.requestLocationPermission(this@SelectLocationActivity)
+                        }
                         fusedLocationClient.lastLocation
                             .addOnSuccessListener { location: Location? ->
                                 // Use the retrieved location to navigate on Google Maps
